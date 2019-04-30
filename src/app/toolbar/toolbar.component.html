@@ -1,0 +1,19 @@
+<div fxLayout="row" fxLayoutAlign="space-around center" class="toolbar">
+  <div>
+    <mat-icon [color]="billsWarrantyInMonthLength > 0 ? 'warn': 'none'"
+              (click)="changeViewByWarranty()">priority_high</mat-icon>
+  </div>
+  <div>
+    <mat-icon (click)="filter()">filter_list</mat-icon>
+  </div>
+  <div routerLink="/create" routerLinkActive="mat-accent">
+    <mat-icon class="main-icon">add_circle</mat-icon>
+  </div>
+  <div (click)="changeView()">
+    <mat-icon>ballot</mat-icon>
+  </div>
+  <div routerLink="/tags" routerLinkActive="mat-accent">
+    <mat-icon>apps</mat-icon>
+  </div>
+</div>
+

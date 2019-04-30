@@ -1,0 +1,111 @@
+<mat-toolbar color="primary">
+  <span><a mat-button routerLink="/login">Logowanie</a> </span>
+  <span><a mat-button routerLink="/register">Rejestracja</a> </span>
+  <span *ngIf="!searchIsClicked" (click)="refresh()" class="logo"><a><span>mam</span> RACHUNKI</a></span>
+  <span *ngIf="!searchIsClicked" class="spacer"></span>
+  <span *ngIf="!searchIsClicked" (click)="searchIsClicked = true"><mat-icon class="search" matSuffix>search</mat-icon></span>
+  <span [hidden]="!searchIsClicked" class="spacer">
+    <form [formGroup]="searchForm">
+      <mat-form-field  >
+        <span class="searchIcon" (click)="searchIsClicked = false" matPrefix><mat-icon class="search" matSuffix>search</mat-icon></span>
+        <mat-label></mat-label>
+        <input type="text" #searchRef aria-label="search" matInput formControlName="search" [matAutocomplete]="auto" [(ngModel)]="value" >
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getSelectedValue($event.option.value)">
+            <mat-option *ngFor="let option of searchOptions" [value]="option._id">
+              {{option._id}} ({{option.idList.length}})
+            </mat-option>
+        </mat-autocomplete>
+        <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value = ''; clearSearchInput()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+  </span>
+</mat-toolbar>
+
+<div class="main-view-container" fxLayout="column" fxLayoutAlign="space-between stretch">
+  <mat-chip-list *ngIf="selectedCategory.length" aria-label="category tags" class="my-chip-list">
+    <div class="search-tags-box">
+      <span>Kategoria:</span>
+      <mat-chip *ngFor="let category of selectedCategory"
+                                        [removable]="removable" (removed)="removeFilter(category,'category')">
+      {{category}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    </div>
+  </mat-chip-list>
+  <mat-chip-list *ngIf="selectedPrice.length" aria-label="price tags" class="my-chip-list">
+    <div class="search-tags-box">
+      <span>Cena:</span>
+      <mat-chip *ngFor="let price of selectedPrice"
+              [removable]="removable" (removed)="removeFilter(price,'price')">
+      {{price}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    </div>
+  </mat-chip-list>
+  <mat-chip-list *ngIf="selectedWarranty" aria-label="price tags" class="my-chip-list">
+    <div class="search-tags-box">
+      <span>Pozostało gwarancji:</span>
+    <mat-chip [removable]="removable" (removed)="removeFilter(selectedWarranty,'warranty')">
+      {{selectedWarranty}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    </div>
+  </mat-chip-list>
+  <div fxLayout="column">
+    <ng-template #noItem>
+      <div class="no-result-box">
+        brak rachunków
+      </div>
+    </ng-template>
+    <div *ngIf="bills.length; else noItem" class="main-list-block" [@listAnimation]="billsLength" >
+      <div #target></div>
+      <mat-card *ngFor="let bill of bills">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxLayout="column" fxLayoutAlign="center center"  class="date-box">
+            <h2>{{bill.purchaseDate | date: 'd'}} {{bill.purchaseDate | date: 'MMM'}}</h2>
+            <p>{{bill.purchaseDate | date: 'yyyy'}}</p>
+          </div>
+          <div fxFlex *ngIf="!bill.expand">
+            <h2>{{bill.product}} {{bill.brand}}</h2>
+            <p><mat-icon>payment</mat-icon>{{bill.price}}</p>
+            <p *ngIf="elementsView.shop"><mat-icon>home</mat-icon>{{bill.shop}}</p>
+            <p *ngIf="elementsView.description"><mat-icon>description</mat-icon>{{bill.description}}</p>
+            <p *ngIf="elementsView.warrantyEndDate || selectedWarranty"
+               [ngStyle]="{'color':checkIfWarrantyOneMonth(bill) ? '#ff8a80' : 'none'}">
+              <mat-icon>restore</mat-icon>do {{bill.warrantyEndDate | date: 'dd.MM.yyyy'}}</p>
+            <p *ngIf="elementsView.purchaseType"><mat-icon>category</mat-icon>{{bill.purchaseType}}</p>
+          </div>
+          <div *ngIf="bill.expand" fxLayout="row" fxLayoutAlign="end center">
+            <button type="button" mat-stroked-button color="warn" (click)="removeBill(bill._id)">
+              <mat-icon>cancel</mat-icon><br><span>usuń</span>
+            </button>
+            <button type="button" mat-stroked-button color="none">
+              <mat-icon>edit</mat-icon><br><span>edytuj</span>
+            </button>
+            <button type="button" mat-stroked-button color="primary" (click)="showBillPhoto(bill.imageBillPath)">
+              <mat-icon>photo_camera</mat-icon><br><span>zdjęcie</span>
+            </button>
+          </div>
+          <div class="action-box" (click)="expandPanel(bill)">
+            <div *ngIf="!bill.expand" fxLayout="column" fxLayoutAlign="center center">
+              <mat-icon class="show-file-icon">chevron_right</mat-icon>
+            </div>
+            <div *ngIf="bill.expand" fxLayout="column" fxLayoutAlign="center center">
+              <mat-icon class="show-file-icon">chevron_left</mat-icon>
+            </div>
+          </div>
+        </div>
+
+      </mat-card>
+      <div fxLayout="row" fxLayoutAlign="center none" *ngIf="bills.length > 5">
+        <button class="button-box" mat-icon-button (click)="scroll(target)">
+          <mat-icon>keyboard_arrow_up</mat-icon><br><p>na górę</p>
+        </button>
+      </div>
+    </div>
+  </div>
+  <app-toolbar [billsWarrantyInMonthLength]="billsWarrantyInMonth" (onViewByWarranty)="getByFilter()"></app-toolbar>
+
+</div>

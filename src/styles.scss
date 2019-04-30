@@ -1,1 +1,48 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+$primary-color: #655BF0;
+$accent-color: #82E6D4;
+$light-accent-color: #FFD6B8;
+$warn-color: #ED7166;
+$background-color: #F2F6FC;
+$font-color: #74727C;
+
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  color: $font-color;
+  background-color: $background-color;
+}
+
+@import '~@angular/material/theming';
+@include mat-core();
+$candy-app-primary: mat-palette($mat-deep-purple, A200, 200, 100);
+$candy-app-accent:  mat-palette($mat-cyan, A200, 200, 100);
+$candy-app-warn:    mat-palette($mat-red, A100);
+$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+
+@include angular-material-theme($candy-app-theme);
+
+button {
+  margin-top: 10px !important;
+  height: 52px;
+  min-width: fit-content;
+}
+
+
+.my-checkbox{
+  label {
+    width:100%;
+    span.mat-checkbox-label{
+      width:100%;
+    }
+  }
+}
+
+.cdk-overlay-pane{
+  max-width: 100vw !important;
+}
+
+

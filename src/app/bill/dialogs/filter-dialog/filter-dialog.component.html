@@ -1,0 +1,77 @@
+<div class="mat-typography">
+  <h2>Filtrowanie: </h2>
+  <div style="height: 55vh; overflow: auto">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>Kategoria</h3>
+        </mat-expansion-panel-header>
+          <div *ngFor="let category of categoryList" class="checkbox-list">
+            <mat-checkbox class="my-checkbox"
+                          (change)="setCategory()"
+                          [(ngModel)]="category.selected"
+                          color="primary">{{category.label}}
+            </mat-checkbox>
+            <mat-divider></mat-divider>
+          </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <h3>Pozostało gwarancji</h3>
+        </mat-expansion-panel-header>
+          <div *ngFor="let option of warrantyOptions" class="checkbox-list" >
+            <mat-radio-group [(ngModel)]="selectedWarranty">
+              <mat-radio-button [value]="option" (change)="setWarrantyOption(option)" color="primary">
+                {{option}}
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-divider></mat-divider>
+          </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <h3>Cena</h3>
+        </mat-expansion-panel-header>
+          <div *ngFor="let price of priceList" class="checkbox-list">
+            <mat-checkbox class="my-checkbox"
+                          (change)="setPrice()"
+                          [(ngModel)]="price.selected"
+                          color="primary">{{price.label}}
+            </mat-checkbox>
+            <mat-divider></mat-divider>
+
+          </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <h3>Data zakupu</h3>
+        </mat-expansion-panel-header>
+          <form [formGroup]="dateForm">
+            <mat-form-field>
+              <input matInput [matDatepicker]="pickerFrom" placeholder="od" formControlName="from">
+              <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+              <mat-datepicker touchUi #pickerFrom></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field >
+              <input matInput [matDatepicker]="pickerTo" placeholder="do" formControlName="to">
+              <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+              <mat-datepicker touchUi #pickerTo></mat-datepicker>
+            </mat-form-field>
+          </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </div>
+
+  <div>
+    <button mat-flat-button color="primary" (click)="openLink($event)">Pokaż wyniki ({{resultCount}})</button>
+  </div>
+</div>
+
+

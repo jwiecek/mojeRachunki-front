@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Pokaż na liście: </h2>
+<mat-dialog-content class="mat-typography">
+
+  <mat-list>
+    <mat-divider></mat-divider>
+    <mat-list-item> <mat-checkbox class="my-checkbox"
+      (change)="setElementView()" [(ngModel)]="elementsView.purchaseType" color="primary">Kategoria</mat-checkbox></mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item><mat-checkbox
+      (change)="setElementView()" [(ngModel)]="elementsView.shop" color="primary">Sklep</mat-checkbox></mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item> <mat-checkbox
+      (change)="setElementView()" [(ngModel)]="elementsView.warrantyEndDate" color="primary">Gwarancja</mat-checkbox></mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item><mat-checkbox
+      (change)="setElementView()" [(ngModel)]="elementsView.description" color="primary">Opis</mat-checkbox></mat-list-item>
+    <mat-divider></mat-divider>
+    <div fxLayout="row">
+      <button mat-stroked-button color="primary" (click)="clearAll()">Usuń zaznaczenie</button>
+      <button mat-stroked-button color="primary" (click)="selectAll()">Zaznacz wszystkie</button>
+    </div>
+    <mat-divider></mat-divider>
+  </mat-list>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <!--<button mat-button mat-dialog-close>Anuluj</button>-->
+  <button mat-flat-button color="primary" (click)="openLink($event)">OK</button>
+</mat-dialog-actions>

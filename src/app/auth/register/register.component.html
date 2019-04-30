@@ -1,0 +1,17 @@
+<mat-card>
+  <h2>Rejestracja</h2>
+  <form (submit)="onRegister(registerForm)" #registerForm="ngForm">
+    <mat-form-field>
+      <input matInput name="email" ngModel type="email" placeholder="E-mail" #emailInput="ngModel" required email>
+      <mat-error *ngIf="emailInput.invalid">Wpisz adres e-mail</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" name="password" ngModel #passwordInput="ngModel" placeholder="Hasło" required>
+      <mat-error *ngIf="passwordInput.invalid">Wpisz hasło</mat-error>
+    </mat-form-field>
+    <button type="submit" mat-button mat-raised-button color="primary">Zarejestruj sięs</button>
+  </form>
+</mat-card>
+
+
+

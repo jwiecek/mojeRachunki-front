@@ -1,0 +1,59 @@
+mat-toolbar {
+  background: #655BF0;
+  .material-icons {
+    font-size: 30px;
+    position: relative;
+    top: 5px;
+    margin-left: -10px;
+    margin-right: 15px;
+  }
+  a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+}
+
+.block-form {
+  height: calc(100vh - 180px);
+  background: #fff;
+  padding: 20px;
+  .selected-tag{
+    background-color: #655BF0;
+    color: #ffffff;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+  .mat-slider-horizontal {
+    width: 100%;
+  }
+}
+
+
+.mat-progress-bar {
+  height: 6px;
+}
+
+.mat-slider{
+  margin-top: 40px;
+}
+
+::ng-deep {
+
+  .mat-slider-thumb-label {
+    transform: rotate(45deg) !important;
+    border-radius: 50% 50% 0 !important;
+  }
+
+  .mat-slider-thumb {
+    transform: scale(0) !important;
+  }
+
+  .mat-slider-thumb-label-text {
+    opacity: 1 !important;
+  }
+  input[type="file"] {
+    visibility: hidden;
+  }
+}

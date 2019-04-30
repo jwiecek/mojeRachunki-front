@@ -1,0 +1,175 @@
+.main-view-container {
+  padding: 10px;
+  height: calc(100vh - 56px);
+  -webkit-overflow-scrolling: touch;
+
+
+  .search-tags-box {
+    width: max-content;
+    height: 70px;
+    //overflow: auto;
+    span{
+      font-size: 11px;
+      margin-left: 10px;
+    }
+  }
+
+  .no-result-box {
+    text-align: center;
+    margin-top: 100px;
+    height: 80vw;
+  }
+
+  .button-box {
+    margin: 20px;
+
+    p {
+      position: relative;
+      bottom: 30px;
+    }
+  }
+
+  .main-list-block{
+    height: calc(100vh - 80px);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+
+    mat-card {
+      margin: 6px 0;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: lighter;
+      border-radius: 8px;
+      h2 {
+        margin: 5px 0;
+        font-size: 16px;
+        color: #424243
+      }
+      p {
+        margin: -2px;
+        font-size: 14px;
+        color: #74727C;
+      }
+
+      .action-box {
+        width: 30px;
+      }
+
+      button {
+        margin: 0 5px !important;
+      }
+
+      .mat-icon {
+        color: #655BF0;
+        position: relative;
+        top: 3px;
+        font-size: 18px;
+      }
+      .date-box {
+        text-align: center;
+        width: 70px;
+        border-right: 1px solid #c5c9cc;
+        margin-right: 10px;
+        margin-left: -10px;
+        min-width: 70px;
+      }
+      .show-file-icon {
+        color: grey;
+        font-size: 30px;
+        height:30px;
+        width:30px;
+        top: 0;
+        cursor: pointer;
+      }
+    }
+
+    button{
+      min-width: 43px;
+      max-width:70px;
+    }
+
+    span{
+      position: relative;
+      bottom: 14px;
+      font-size: 12px;
+      color: #919097;
+    }
+
+    .mat-stroked-button {
+      padding: 0 5px;
+    }
+
+  }
+  mat-chip-list {
+    max-width: 100vw;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+}
+
+mat-toolbar {
+  background: #655BF0;
+  position: sticky;
+  top: 0;
+  //z-index: 20;
+
+  .logo {
+    position: relative;
+    top: 2px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  a {
+    color: #ffffff;
+    text-decoration: none;
+    font-family: 'Baloo Chettan', cursive;
+  }
+  mat-icon.mat-icon.search{
+    position: relative;
+    top:5px;
+    margin-right: 10px;
+  }
+  span {
+    font-family: 'Calligraffitti', cursive;
+  }
+
+  form{
+    .mat-form-field{
+      width:100%;
+      font-size: 16px;
+    }
+  }
+
+}
+
+
+
+::ng-deep{
+  .my-chip-list{
+    div.mat-chip-list-wrapper{
+      display: block !important;
+    }
+  }
+}
+
+app-toolbar{
+  box-shadow: 0 -5px 5px -5px #333;
+  margin-top: 15px;
+  border: 1px solid #ccc;
+  position: sticky;
+  bottom: 0;
+}
+
+
+
+
+

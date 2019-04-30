@@ -1,0 +1,194 @@
+<mat-toolbar color="primary">
+  <span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>
+  <h3>Dodawanie rachunku</h3>
+</mat-toolbar>
+
+<form [formGroup]="billForm" novalidate (submit)="onSaveBill()">
+  <div class="block-form" *ngIf="counter === 0 || mobile">
+    <h2>Wybierz zdjęcia: </h2>
+    <h2>1</h2>
+    <div>
+      <button mat-stroked-button type="button" (click)="filePicker.click()">wybierz zdjęcie paragonu</button>
+      <input type="file" #filePicker (change)="onImagePicked($event.target.files)">
+    </div>
+    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && billForm.get('imageBillPath').valid">
+      <img [src]="imagePreview" [alt]="billForm.value.product">
+    </div>
+    <div>
+      <h2>2</h2><span> (niewymagane)</span>
+    </div>
+    <div>
+      <button mat-stroked-button type="button" (click)="filePicker.click()">wybierz zdjęcie produktu</button>
+      <!--<input type="file" #filePicker (change)="onImagePicked($event)">-->
+    </div>
+    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+      <img [src]="imagePreview" [alt]="billForm.value.title">
+    </div>
+  </div>
+
+  <div class="block-form" [hidden]="counter !== 1 || mobile">
+    <h2>Data zakupu</h2>
+    <div>
+      <mat-form-field class="example-full-width">
+        <input matInput [max]="maxDate"
+               [matDatepicker]="picker"
+               placeholder="Data zakupu"
+               formControlName="purchaseDate"
+               (dateInput)="next()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="block-form" [hidden]="counter !== 2 || mobile">
+
+    <h2>Lata gwarancji</h2>
+    <p>{{selectedWarrantyLabel}} {{time}}</p>
+    <div>
+      <mat-slider color="primary" formControlName="warranty"
+        [max]="54"
+        [min]="0"
+        [step]="1"
+        [thumbLabel]="thumbLabel"
+        (input)="getWarrantyValue($event)">
+      </mat-slider>
+    </div>
+  </div>
+
+
+  <div class="block-form" *ngIf="counter === 3 || mobile">
+    <h2>Kwota</h2>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #priceList [multiple]="true">
+          <mat-chip *ngFor="let tag of tagsPrice" [selectable]="selectable" [selected]="tag.selected"
+                    (click)="selectTag(tag, false); next()" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
+            {{tag.label}}
+          </mat-chip>
+          <input
+            [matChipInputFor]="priceList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addTag($event, 'price', false)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="block-form" *ngIf="counter === 4 || mobile">
+    <h2>Kategoria produktu</h2>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #purchaseTypeList [multiple]="true" formControlName="purchaseType">
+          <mat-chip *ngFor="let tag of tagsPurchaseType"
+                    (click)="selectTag(tag, false); next()" [selectable]="selectable" [selected]="tag.selected" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
+            {{tag.label}}
+          </mat-chip>
+          <input
+            [matChipInputFor]="purchaseTypeList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addTag($event, 'purchaseType', false)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="block-form" *ngIf="counter === 5 || mobile">
+    <h2>Produkt</h2>
+    <span>(możesz wybrać kilka)</span>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #productList [multiple]="true" formControlName="product">
+          <mat-chip *ngFor="let tag of tagsProduct"
+                    (click)="selectTag(tag, true)" [selectable]="selectable" [selected]="tag.selected" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
+            {{tag.label}}
+          </mat-chip>
+          <input
+                 [matChipInputFor]="productList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addTag($event, 'product', true)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+
+
+  <div class="block-form" *ngIf="counter === 6 || mobile">
+    <h2>Marka</h2>
+    <span>(możesz wybrać kilka / niewymagane)</span>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #brandList [multiple]="true" formControlName="brand">
+          <mat-chip *ngFor="let tag of tagsBrand"
+                    (click)="selectTag(tag, true)" [selectable]="selectable" [selected]="tag.selected" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
+            {{tag.label}}
+          </mat-chip>
+          <input
+            [matChipInputFor]="brandList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addTag($event, 'brand', true)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="block-form" *ngIf="counter === 7 || mobile">
+    <h2>Sklep</h2>
+    <span>(niewymagane)</span>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #shopList [multiple]="true" formControlName="shop">
+          <mat-chip *ngFor="let tag of tagsShop"
+                    (click)="selectTag(tag, false); next()" [selectable]="selectable" [selected]="tag.selected" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
+            {{tag.label}}
+          </mat-chip>
+          <input
+            [matChipInputFor]="shopList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="addTag($event, 'shop', false)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="block-form" *ngIf="counter === 8 || mobile">
+    <h2>Opis</h2>
+    <span>(niewymagane)</span>
+    <div>
+      <mat-form-field>
+        <textarea matInput placeholder="wpisz opis" formControlName="description" rows="2"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="block-form" *ngIf="counter === 9 || mobile">
+    <h2>Podsumowanie</h2>
+    <p>Data zakupu: {{billForm.value.purchaseDate | date}}</p>
+    <p>Kategoria: {{billForm.value.purchaseType}}</p>
+    <p>Produkt: {{billForm.value.product}}</p>
+    <p>Marka: {{billForm.value.brand}}</p>
+    <p>Sklep: {{billForm.value.shop}}</p>
+    <p>Gwarancja: {{selectedWarrantyLabel}} {{time}}</p>
+    <p>Opis: {{billForm.value.description}}</p>
+  </div>
+
+  <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+
+
+  <div fxLayout="row">
+    <button *ngIf="counter > 0 || mobile " type="button" mat-stroked-button color="none"
+            (click)="previous()"><mat-icon>chevron_left</mat-icon>Wstecz</button>
+    <div fxFlex></div>
+    <div style="color:red; margin-left:20px">{{alert}}</div>
+    <button *ngIf="canNext[counter] && (counter < 9) || mobile " type="button"
+            mat-stroked-button color="primary" (click)="next()">Dalej<mat-icon>chevron_right</mat-icon></button>
+    <button *ngIf="counter === 9|| mobile" type="submit" mat-flat-button color="primary">Zapisz paragon</button>
+  </div>
+
+</form>
+

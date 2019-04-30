@@ -1,0 +1,124 @@
+<mat-toolbar color="primary">
+  <span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>
+  <h3>Edycja tagów</h3>
+</mat-toolbar>
+<div class="block">
+  <div #target>
+    <h2>Lata gwarancji</h2>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #warrantyList aria-label="Tag selection">
+          <mat-chip *ngFor="let tag of tagsWarranty" [selectable]="selectable"
+                    [removable]="removable" (removed)="removeTag(tag)">
+            {{tag.label}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input [matChipInputFor]="warrantyList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addTag($event, 'warranty', '')">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+  <div>
+    <h2>Kwota</h2>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #priceList aria-label="Tag selection">
+          <mat-chip *ngFor="let tag of tagsPrice"
+                    [removable]="removable" (removed)="removeTag(tag)">
+            {{tag.label}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input [matChipInputFor]="priceList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addTag($event, 'price', '')">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+  <div>
+    <h2>Kategoria</h2>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #purchaseTypeList aria-label="Tag selection">
+          <mat-chip *ngFor="let tag of tagsPurchaseType" [selectable]="selectable"
+                    [removable]="removable" (removed)="removeTag(tag)">
+            {{tag.label}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input [matChipInputFor]="purchaseTypeList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addTag($event, 'purchaseType', '')">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+  <div>
+    <h2>Produkty</h2>
+    <div *ngFor="let cTag of tagsPurchaseType; let i = index;">
+      <p>{{cTag.label}}</p>
+      <mat-form-field>
+        <mat-chip-list #productList aria-label="Tag selection">
+          <mat-chip *ngFor="let tag of tagsProduct[i]"
+                    [removable]="removable" (removed)="removeTag(tag)">
+            {{tag.label}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input [matChipInputFor]="productList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addTag($event, 'product', cTag.label)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+  <div>
+    <h2>Sklepy</h2>
+    <div *ngFor="let cTag of tagsPurchaseType; let i = index">
+      <p>{{cTag.label}}</p>
+      <mat-form-field>
+        <mat-chip-list #shopList aria-label="Tag selection">
+          <mat-chip *ngFor="let tag of tagsShop[i]" [selectable]="selectable"
+                    [removable]="removable" (removed)="removeTag(tag)">
+            {{tag.label}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input [matChipInputFor]="shopList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addTag($event, 'shop', cTag.label)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+  <div>
+    <h2>Marka</h2>
+    <div *ngFor="let cTag of tagsPurchaseType; let i = index">
+      <p>{{cTag.label}}</p>
+      <mat-form-field>
+        <mat-chip-list #brandList aria-label="Tag selection">
+          <mat-chip *ngFor="let tag of tagsBrand[i]"
+                    [removable]="removable" (removed)="removeTag(tag)">
+            {{tag.label}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input [matChipInputFor]="brandList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addTag($event, 'brand', cTag.label)">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center none">
+    <button class="button-box" mat-icon-button (click)="scroll(target)">
+      <mat-icon>keyboard_arrow_up</mat-icon><br><p>na górę</p>
+    </button>
+  </div>
+</div>
+
+
