@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Tag } from '../../tag/tag.model';
 import { TagService } from '../../tag/tag.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent, MatSliderChange } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { mimeType } from './mime-type.validator';
 import { FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
@@ -53,6 +53,7 @@ export class BillCreateComponent implements OnInit {
   imagePath;
   mode;
   billId: string;
+  yearUnit = 'lat';
 
   constructor(
     private http: HttpClient,
@@ -183,7 +184,7 @@ export class BillCreateComponent implements OnInit {
     );
   }
 
-  getWarrantyValue(event: any): void {
+  getWarrantyValue(event: MatSliderChange): void {
     this.selectedWarrantyValue = event.value;
     this.changeWarrantyValue();
   }
@@ -359,4 +360,8 @@ export class BillCreateComponent implements OnInit {
       });
     }
   }
+
+  // test(value: number | null) {
+  //   return `${value} ${this.yearUnit}`;
+  // }
 }

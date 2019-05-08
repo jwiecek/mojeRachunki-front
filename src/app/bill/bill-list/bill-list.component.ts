@@ -44,8 +44,8 @@ export class BillListComponent implements OnInit, OnDestroy {
   public tags = [];
   public billsLength: number;
   private billsCopy: Bill[] = [];
-  private searchOptions;
-  private searchForm: FormGroup;
+  public searchOptions;
+  public searchForm: FormGroup;
   @ViewChild('searchRef') searchRef: ElementRef;
   private search: string;
   public elementsView;
@@ -60,6 +60,7 @@ export class BillListComponent implements OnInit, OnDestroy {
   private todayPlusOneMonth;
   private todayPlusOneYear;
   private searchFilterBills = [];
+  value;
 
   constructor(
     private billsService: BillService,

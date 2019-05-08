@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   registerUser(user) {
-    return this.http.post(`${this.API_URL}/auth/register`, user);
+    return this.http.post(`${this.API_URL}/users/register`, user);
   }
 
   login(email: string, password: string) {

@@ -1,6 +1,8 @@
 <mat-toolbar color="primary">
   <span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>
-  <h3><span *ngIf="mode !== 'edit'">Dodawanie</span> <span *ngIf="mode==='edit'">Edycja</span> rachunku</h3>
+  <h3>Dodawanie rachunku</h3>
+  <!--<h3 *ngIf="mode !== 'edit'">Dodawanie rachunku</h3>-->
+  <!--<h3 *ngIf="mode == 'edit'">Edycja rachunku</h3>-->
 </mat-toolbar>
 
 <form [formGroup]="billForm" novalidate (submit)="onSaveBill()">
@@ -46,6 +48,7 @@
     <h2>Lata gwarancji</h2>
     <p>{{selectedWarrantyLabel}} {{time}}</p>
     <div>
+      <!--[displayWith]="test.bind(this)"-->
       <mat-slider color="primary" formControlName="warranty"
         [max]="54"
         [min]="0"
