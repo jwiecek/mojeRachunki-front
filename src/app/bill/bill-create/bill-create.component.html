@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
   <span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>
-  <h3>Dodawanie rachunku</h3>
+  <h3><span *ngIf="mode !== 'edit'">Dodawanie</span> <span *ngIf="mode==='edit'">Edycja</span> rachunku</h3>
 </mat-toolbar>
 
 <form [formGroup]="billForm" novalidate (submit)="onSaveBill()">
