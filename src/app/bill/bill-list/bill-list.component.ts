@@ -15,6 +15,7 @@ import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
 import { Tag } from '../../tag/tag.model';
 import { BillPhotoDialogComponent } from '../dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bill-list',
@@ -60,7 +61,12 @@ export class BillListComponent implements OnInit, OnDestroy {
   private todayPlusOneYear;
   private searchFilterBills = [];
 
-  constructor(private billsService: BillService, private tagService: TagService, public dialog: MatDialog) {}
+  constructor(
+    private billsService: BillService,
+    private tagService: TagService,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.searchForm = new FormGroup({
@@ -259,13 +265,13 @@ export class BillListComponent implements OnInit, OnDestroy {
     });
   }
 
-  // getResultCount() {
-  //   console.log(this.bills.length);
-  //   return this.bills.length;
-  // }
-
   scroll(el: HTMLElement): void {
     el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  editBill(bill) {
+    console.log(bill._id);
+    this.router.navigate(['./edit/', bill._id]);
   }
 
   ngOnDestroy() {

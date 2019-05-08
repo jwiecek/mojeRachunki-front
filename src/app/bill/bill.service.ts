@@ -34,6 +34,14 @@ export class BillService {
     return this.http.post(`${this.API_URL}/bills/create`, bill);
   }
 
+  updateBill(bill: Bill, id: string) {
+    return this.http.put(`${this.API_URL}/bills/update?id=${id}`, bill);
+  }
+
+  getBillById(id: string) {
+    return this.http.get(`${this.API_URL}/bills/find/${id}`);
+  }
+
   filterBill(search: string) {
     return this.http.get(`${this.API_URL}/bills/filter/${search}`);
   }
@@ -48,7 +56,7 @@ export class BillService {
     return this.http.post(`${this.API_URL}/bills/uploadPhoto`, formData);
   }
 
-  getPhoto(imgpath) {
-    return this.http.get(`${this.API_URL}/bills/${imgpath}`);
+  getPhoto(imgPath: string) {
+    return this.http.get(`${this.API_URL}/bills/${imgPath}`);
   }
 }

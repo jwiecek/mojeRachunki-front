@@ -169,6 +169,7 @@
   <div class="block-form" *ngIf="counter === 9 || mobile">
     <h2>Podsumowanie</h2>
     <p>Data zakupu: {{billForm.value.purchaseDate | date}}</p>
+    <p>Kwota: {{billForm.value.price}}</p>
     <p>Kategoria: {{billForm.value.purchaseType}}</p>
     <p>Produkt: {{billForm.value.product}}</p>
     <p>Marka: {{billForm.value.brand}}</p>
@@ -185,9 +186,9 @@
             (click)="previous()"><mat-icon>chevron_left</mat-icon>Wstecz</button>
     <div fxFlex></div>
     <div style="color:red; margin-left:20px">{{alert}}</div>
-    <button *ngIf="canNext[counter] && (counter < 9) || mobile " type="button"
+    <button *ngIf="(mode ==='edit' && (counter < 9))|| canNext[counter] && (counter < 9) || mobile" type="button"
             mat-stroked-button color="primary" (click)="next()">Dalej<mat-icon>chevron_right</mat-icon></button>
-    <button *ngIf="counter === 9|| mobile" type="submit" mat-flat-button color="primary">Zapisz paragon</button>
+    <button *ngIf="counter === 9|| mobile" type="submit" mat-flat-button color="primary"><span *ngIf="mode !== 'edit'"> Zapisz</span><span *ngIf="mode === 'edit'"> Zaktualizuj</span> paragon</button>
   </div>
 
 </form>

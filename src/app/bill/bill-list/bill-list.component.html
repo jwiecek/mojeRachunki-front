@@ -1,6 +1,9 @@
 <mat-toolbar color="primary">
-  <span><a mat-button routerLink="/login">Logowanie</a> </span>
-  <span><a mat-button routerLink="/register">Rejestracja</a> </span>
+  <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/login">Logowanie</button>
+    <button mat-menu-item routerLink="/register">Rejestracja</button>
+  </mat-menu>
   <span *ngIf="!searchIsClicked" (click)="refresh()" class="logo"><a><span>mam</span> RACHUNKI</a></span>
   <span *ngIf="!searchIsClicked" class="spacer"></span>
   <span *ngIf="!searchIsClicked" (click)="searchIsClicked = true"><mat-icon class="search" matSuffix>search</mat-icon></span>
@@ -81,7 +84,7 @@
             <button type="button" mat-stroked-button color="warn" (click)="removeBill(bill._id)">
               <mat-icon>cancel</mat-icon><br><span>usuń</span>
             </button>
-            <button type="button" mat-stroked-button color="none">
+            <button type="button" mat-stroked-button color="none" (click)="editBill(bill)">
               <mat-icon>edit</mat-icon><br><span>edytuj</span>
             </button>
             <button type="button" mat-stroked-button color="primary" (click)="showBillPhoto(bill.imageBillPath)">

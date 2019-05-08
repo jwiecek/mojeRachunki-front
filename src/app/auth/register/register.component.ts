@@ -12,10 +12,11 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {}
 
-  // onRegister(form: NgForm) {
-  //   if (form.invalid) {
-  //     return;
-  //   }
-  //   this.authService.createUser(form.value.email, form.value.password);
-  // }
+  onRegister(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+    const user = { email: form.value.email, password: form.value.password };
+    this.authService.registerUser(user);
+  }
 }

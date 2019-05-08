@@ -20,6 +20,7 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
   MatNativeDateModule,
   MatProgressBarModule,
   MatRadioModule,
@@ -87,7 +88,8 @@ registerLocaleData(pl);
     MatMomentDateModule,
     MatBottomSheetModule,
     MatExpansionModule,
-    MatSliderModule
+    MatSliderModule,
+    MatMenuModule
   ],
   providers: [
     // { provide: DateAdapter, useClass: CustomDateAdapter },

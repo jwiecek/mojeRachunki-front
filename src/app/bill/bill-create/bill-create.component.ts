@@ -7,7 +7,7 @@ import { Tag } from '../../tag/tag.model';
 import { TagService } from '../../tag/tag.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { mimeType } from './mime-type.validator';
 import { FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
 const UploadURL = 'http://localhost:3000/api/upload';
@@ -51,12 +51,15 @@ export class BillCreateComponent implements OnInit {
   selectedWarrantyLabel: any = 0;
   fileToUpload: File = null;
   imagePath;
+  mode;
+  billId: string;
 
   constructor(
     private http: HttpClient,
     private tagService: TagService,
     private billService: BillService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -66,6 +69,16 @@ export class BillCreateComponent implements OnInit {
       this.mobile = true;
     }
     this.getTags();
+
+    this.route.params.subscribe(params => {
+      if (params.billId) {
+        this.mode = 'edit';
+        this.billId = params.billId;
+        this.getSelectedBill(this.billId);
+      } else {
+        this.mode = 'create';
+      }
+    });
     this.billForm = new FormGroup({
       imageBillPath: new FormControl(null, {
         validators: [Validators.required],
@@ -92,6 +105,55 @@ export class BillCreateComponent implements OnInit {
     });
   }
 
+  getSelectedBill(id): void {
+    this.billService.getBillById(id).subscribe((bill: Bill) => {
+      this.selectedPurchaseTypes = [bill.purchaseType];
+      this.selectedPrice = [bill.price];
+      this.selectedProducts = [...bill.product];
+      this.selectedBrands = [bill.brand];
+      this.selectedShops = [bill.shop];
+
+      const allSelectedTags = [
+        ...this.selectedPurchaseTypes,
+        ...this.selectedPrice,
+        ...this.selectedProducts,
+        ...this.selectedBrands,
+        ...this.selectedShops
+      ];
+      allSelectedTags.forEach(tag => {
+        this.tags.forEach(t => {
+          if (tag === t.label) {
+            t.selected = !t.selected;
+          }
+        });
+      });
+
+      this.billForm.setValue({
+        imageBillPath: bill.imageBillPath,
+        purchaseDate: bill.purchaseDate,
+        purchaseType: this.selectedPurchaseTypes,
+        product: this.selectedProducts,
+        brand: this.selectedBrands,
+        shop: this.selectedShops,
+        price: this.selectedPrice,
+        warranty: bill.warranty,
+        description: bill.description
+      });
+
+      this.selectedWarrantyValue = bill.warranty;
+      this.changeWarrantyValue();
+
+      this.tagsBrand = this.tags.filter(
+        t => t.type === 'brand' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
+      );
+      this.tagsProduct = this.tags.filter(
+        t => t.type === 'product' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
+      );
+      this.tagsShop = this.tags.filter(
+        t => t.type === 'shop' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
+      );
+    });
+  }
   // onImagePicked(event: Event) {
   //   const file = (event.target as HTMLInputElement).files[0];
   //   // this.billForm.patchValue({ imageBillPath: file }); // patchValue == single; setValue === all
@@ -107,10 +169,9 @@ export class BillCreateComponent implements OnInit {
   //   this.billService.upload(file).subscribe(res => console.log(res));
   // }
 
-  onImagePicked(files: FileList) {
+  onImagePicked(files: FileList): void {
     this.fileToUpload = files.item(0);
     // this.fileToUpload.name = 'aparat';
-    console.log(this.fileToUpload);
     this.billService.uploadPhoto(this.fileToUpload).subscribe(
       data => {
         this.imagePath = data[0].filename;
@@ -168,7 +229,7 @@ export class BillCreateComponent implements OnInit {
     }
   }
 
-  getTags() {
+  getTags(): void {
     this.tagService.getTags().subscribe((tags: Tag[]) => {
       this.tags = tags;
       this.tags.forEach(t => (t.selected = false));
@@ -176,7 +237,7 @@ export class BillCreateComponent implements OnInit {
     });
   }
 
-  getTagsByType() {
+  getTagsByType(): void {
     this.tagsPurchaseType = this.tags.filter(tag => tag.type === 'purchaseType');
     this.tagsPrice = this.tags.filter(tag => tag.type === 'price');
     this.tagsWarranty = this.tags.filter(tag => tag.type === 'warranty');
@@ -192,21 +253,6 @@ export class BillCreateComponent implements OnInit {
         t => t.type === 'shop' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
       );
     }
-  }
-
-  onSaveBill(): void {
-    if (this.billForm.invalid) {
-      return;
-    }
-    const newBill = this.billForm.value;
-    newBill.warranty = this.selectedWarrantyMonth;
-    newBill.imageProductPath =
-      'https://vignette.wikia.nocookie.net/nonsensopedia/images/c/c0/Paragon_czyt.png/revision/latest?cb=20100531220310';
-    newBill.createdAt = new Date();
-    newBill.updatedAt = '';
-    this.billService.addBill(newBill).subscribe((bill: Bill) => {
-      this.router.navigate(['/']);
-    });
   }
 
   selectTag(tag: Tag, multiple: boolean): void {
@@ -288,5 +334,29 @@ export class BillCreateComponent implements OnInit {
     this.counter--;
     this.progress = this.progress - 10;
     this.alert = '';
+  }
+
+  onSaveBill(): void {
+    if (this.billForm.invalid) {
+      return;
+    }
+    const newBill = this.billForm.value;
+    newBill.warranty = this.selectedWarrantyMonth;
+    newBill.imageProductPath =
+      'https://vignette.wikia.nocookie.net/nonsensopedia/images/c/c0/Paragon_czyt.png/revision/latest?cb=20100531220310';
+    if (this.mode === 'edit') {
+      newBill.updatedAt = new Date();
+      this.billService.updateBill(newBill, this.billId).subscribe(bill => {
+        console.log(bill);
+        this.router.navigate(['/']);
+      });
+    } else {
+      newBill.createdAt = new Date();
+      newBill.updatedAt = '';
+      this.billService.addBill(newBill).subscribe((bill: Bill) => {
+        console.log(bill);
+        this.router.navigate(['/']);
+      });
+    }
   }
 }
