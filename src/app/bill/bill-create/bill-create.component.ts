@@ -53,7 +53,8 @@ export class BillCreateComponent implements OnInit {
   imagePath;
   mode;
   billId: string;
-  yearUnit = 'lat';
+  // yearUnit = 'lat';
+  headerName: string;
 
   constructor(
     private http: HttpClient,
@@ -74,10 +75,12 @@ export class BillCreateComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params.billId) {
         this.mode = 'edit';
+        this.headerName = 'Edycja';
         this.billId = params.billId;
         this.getSelectedBill(this.billId);
       } else {
         this.mode = 'create';
+        this.headerName = 'Dodawanie';
       }
     });
     this.billForm = new FormGroup({
@@ -238,6 +241,32 @@ export class BillCreateComponent implements OnInit {
     });
   }
 
+  selectTag(tag: Tag, multiple: boolean): void {
+    this.tags
+      .filter(t => t.type === tag.type)
+      .forEach(t => {
+        if (!multiple) {
+          tag.label === t.label ? (t.selected = true) : (t.selected = false);
+        } else {
+          if (tag.label === t.label) {
+            t.selected = !t.selected;
+          }
+        }
+      });
+    this.filterSelectedTags();
+    this.getTagsByType();
+    this.setFormValue();
+    this.checkPagination();
+  }
+
+  filterSelectedTags() {
+    this.selectedPurchaseTypes = this.tagsPurchaseType.filter(t => t.selected === true).map(t => t.label);
+    this.selectedPrice = this.tagsPrice.filter(t => t.selected === true).map(t => t.label);
+    this.selectedProducts = this.tagsProduct.filter(t => t.selected === true).map(t => t.label);
+    this.selectedBrands = this.tagsBrand.filter(t => t.selected === true).map(t => t.label);
+    this.selectedShops = this.tagsShop.filter(t => t.selected === true).map(t => t.label);
+  }
+
   getTagsByType(): void {
     this.tagsPurchaseType = this.tags.filter(tag => tag.type === 'purchaseType');
     this.tagsPrice = this.tags.filter(tag => tag.type === 'price');
@@ -256,38 +285,6 @@ export class BillCreateComponent implements OnInit {
     }
   }
 
-  selectTag(tag: Tag, multiple: boolean): void {
-    this.tags
-      .filter(t => t.type === tag.type)
-      .forEach(t => {
-        if (!multiple) {
-          tag.label === t.label ? (t.selected = true) : (t.selected = false);
-        } else {
-          if (tag.label === t.label) {
-            t.selected = !t.selected;
-          }
-        }
-      });
-
-    this.selectedPurchaseTypes = this.tagsPurchaseType.filter(t => t.selected === true).map(t => t.label);
-    this.selectedPrice = this.tagsPrice.filter(t => t.selected === true).map(t => t.label);
-    this.selectedProducts = this.tagsProduct.filter(t => t.selected === true).map(t => t.label);
-    this.selectedBrands = this.tagsBrand.filter(t => t.selected === true).map(t => t.label);
-    this.selectedShops = this.tagsShop.filter(t => t.selected === true).map(t => t.label);
-
-    this.getTagsByType();
-    this.setFormValue();
-
-    this.canNext[this.counter] = true;
-
-    if (this.ended && this.billForm.invalid) {
-      this.canNext[this.counter] = false;
-      this.alert = 'zaznacz coś!';
-    } else {
-      this.alert = '';
-    }
-  }
-
   setFormValue() {
     this.billForm.setValue({
       imageBillPath: this.imagePath,
@@ -300,6 +297,17 @@ export class BillCreateComponent implements OnInit {
       warranty: this.selectedWarrantyValue,
       description: this.billForm.get('description').value
     });
+  }
+
+  checkPagination() {
+    this.canNext[this.counter] = true;
+
+    if (this.ended && this.billForm.invalid) {
+      this.canNext[this.counter] = false;
+      this.alert = 'zaznacz coś!';
+    } else {
+      this.alert = '';
+    }
   }
 
   addTag(event: MatChipInputEvent, tagType: string, multiple: boolean): void {
