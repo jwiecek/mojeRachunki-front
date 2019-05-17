@@ -9,6 +9,7 @@ import { Bill } from './bill.model';
 })
 export class BillService {
   API_URL = 'http://localhost:3000';
+  loggedUserId;
 
   public elementsView = new BehaviorSubject<object>([
     { price: true },
@@ -23,18 +24,27 @@ export class BillService {
   public selectedPrice = new BehaviorSubject<object>([]);
   public resultCount = new BehaviorSubject<number>(0);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.loggedUserId = this.getLoggedUserId();
+  }
 
+  getLoggedUserId(): number {
+    return JSON.parse(localStorage.getItem('currentUser')).userId;
+  }
   getBills() {
     // return this.http.get(`${this.API_URL}/bills/all`).pipe(tap(bill => new Bill(bill)));
     return this.http.get(`${this.API_URL}/bills/all`);
   }
 
-  addBill(bill: Bill) {
-    return this.http.post(`${this.API_URL}/bills/create`, bill);
+  createBill(bill: Bill) {
+    const newBill = bill;
+    newBill.createdById = this.loggedUserId;
+    return this.http.post(`${this.API_URL}/bills/create`, newBill);
   }
 
   updateBill(bill: Bill, id: string) {
+    const newBill = bill;
+    newBill.updatedById = this.loggedUserId;
     return this.http.put(`${this.API_URL}/bills/update?id=${id}`, bill);
   }
 
@@ -50,9 +60,9 @@ export class BillService {
     return this.http.delete(`${this.API_URL}/bills/delete/${id}`);
   }
 
-  uploadPhoto(fileToUpload: File) {
+  uploadPhoto(fileToUpload) {
     const formData: FormData = new FormData();
-    formData.append('image', fileToUpload, fileToUpload.name);
+    formData.append('images', fileToUpload, fileToUpload.name);
     return this.http.post(`${this.API_URL}/bills/uploadPhoto`, formData);
   }
 

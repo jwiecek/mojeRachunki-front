@@ -17,4 +17,6 @@ export interface Bill {
   purchaseMonth?: number;
   purchaseYear?: number;
   warrantyEndDate?: string;
+  createdById: string;
+  updatedById?: string;
 }

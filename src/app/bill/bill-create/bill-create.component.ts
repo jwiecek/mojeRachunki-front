@@ -362,7 +362,7 @@ export class BillCreateComponent implements OnInit {
     } else {
       newBill.createdAt = new Date();
       newBill.updatedAt = '';
-      this.billService.addBill(newBill).subscribe((bill: Bill) => {
+      this.billService.createBill(newBill).subscribe((bill: Bill) => {
         console.log(bill);
         this.router.navigate(['/']);
       });
