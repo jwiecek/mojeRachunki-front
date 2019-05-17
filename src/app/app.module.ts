@@ -28,7 +28,7 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TagComponent } from './tag/tag/tag.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -43,6 +43,7 @@ import pl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { AuthInterceptor } from './auth/auth-interceptor';
 registerLocaleData(pl);
 
 @NgModule({
@@ -94,7 +95,8 @@ registerLocaleData(pl);
   providers: [
     // { provide: DateAdapter, useClass: CustomDateAdapter },
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
-    { provide: LOCALE_ID, useValue: 'pl' }
+    { provide: LOCALE_ID, useValue: 'pl' },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChangeViewDialogComponent, FilterDialogComponent, BillPhotoDialogComponent]

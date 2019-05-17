@@ -5,17 +5,14 @@ import { Bill } from '../bill.model';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
-// import moment from 'moment/src/moment';
-// import 'moment/src/locale/pl';
-// @ts-ignore
 import * as moment from 'moment';
-// import 'moment/min/locales';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
 import { Tag } from '../../tag/tag.model';
 import { BillPhotoDialogComponent } from '../dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-bill-list',
@@ -62,14 +59,25 @@ export class BillListComponent implements OnInit, OnDestroy {
   private searchFilterBills = [];
   value;
 
+  userIsAuthenticated = false;
+  private authListenerSubs: Subscription;
+
   constructor(
     private billsService: BillService,
     private tagService: TagService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.userIsAuthenticated = this.authService.getIsAuth();
+    console.log(this.userIsAuthenticated);
+    this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
+      this.userIsAuthenticated = isAuthenticated;
+      console.log(this.userIsAuthenticated);
+    });
+
     this.searchForm = new FormGroup({
       search: new FormControl()
     });
@@ -277,5 +285,10 @@ export class BillListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+    this.authListenerSubs.unsubscribe();
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 }

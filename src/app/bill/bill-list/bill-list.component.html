@@ -1,8 +1,9 @@
 <mat-toolbar color="primary">
   <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/login">Logowanie</button>
-    <button mat-menu-item routerLink="/register">Rejestracja</button>
+    <button mat-menu-item routerLink="/login" *ngIf="!userIsAuthenticated">Logowanie</button>
+    <button mat-menu-item routerLink="/register" *ngIf="!userIsAuthenticated">Rejestracja</button>
+    <button mat-menu-item (click)="onLogout()" *ngIf="userIsAuthenticated">Wyloguj</button>
   </mat-menu>
   <span *ngIf="!searchIsClicked" (click)="refresh()" class="logo"><a><span>mam</span> RACHUNKI</a></span>
   <span *ngIf="!searchIsClicked" class="spacer"></span>
@@ -26,7 +27,7 @@
   </span>
 </mat-toolbar>
 
-<div class="main-view-container" fxLayout="column" fxLayoutAlign="space-between stretch">
+<div class="main-view-container" fxLayout="column" fxLayoutAlign="space-between stretch" *ngIf="userIsAuthenticated">
   <mat-chip-list *ngIf="selectedCategory.length" aria-label="category tags" class="my-chip-list">
     <div class="search-tags-box">
       <span>Kategoria:</span>

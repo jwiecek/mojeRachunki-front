@@ -1,17 +1,15 @@
-import * as moment from 'moment';
-
 export interface Bill {
   _id: string;
   imageBillPath?: string;
   imageProductPath?: string;
-  price: string; // do50zł, 50-100zł
+  price: string;
   purchaseDate: string;
-  purchaseType: string[]; // odzież, narzedzia, agd
-  shop: string; // Obi, Zara
-  product: string[]; // spodnie, wkrętarka, pralka
-  brand: string[]; // Lee, Philips
-  warranty: number; // 2 lata
-  description?: string; // czerwona bluzka dla siostry
+  purchaseType: string[];
+  shop: string;
+  product: string[];
+  brand: string[];
+  warranty: number;
+  description?: string;
   createdAt: string;
   updatedAt: string;
   expand?: boolean;
