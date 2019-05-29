@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Bill } from '../bill.model';
 import { BillService } from '../bill.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -9,8 +9,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent, MatSliderChange } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { mimeType } from './mime-type.validator';
-import { FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
-const UploadURL = 'http://localhost:3000/api/upload';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-bill-create',
@@ -26,7 +25,6 @@ export class BillCreateComponent implements OnInit {
   tagsShop: Tag[];
   tagsPrice: Tag[];
   tagsWarranty: Tag[];
-  imagePreview: string;
   billForm: FormGroup;
   visible = true;
   thumbLabel = true;
@@ -50,16 +48,18 @@ export class BillCreateComponent implements OnInit {
   time = 'miesięcy';
   selectedWarrantyLabel: any = 0;
   fileToUpload: File = null;
-  imagePath;
+  imagePath: Blob = null;
   mode;
   billId: string;
   // yearUnit = 'lat';
   headerName: string;
+  currentUser = this.authServices.userId;
 
   constructor(
     private http: HttpClient,
     private tagService: TagService,
     private billService: BillService,
+    private authServices: AuthService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -158,6 +158,7 @@ export class BillCreateComponent implements OnInit {
       );
     });
   }
+
   // onImagePicked(event: Event) {
   //   const file = (event.target as HTMLInputElement).files[0];
   //   // this.billForm.patchValue({ imageBillPath: file }); // patchValue == single; setValue === all
@@ -175,14 +176,17 @@ export class BillCreateComponent implements OnInit {
 
   onImagePicked(files: FileList): void {
     this.fileToUpload = files.item(0);
-    // this.fileToUpload.name = 'aparat';
+    this.uploadFile();
+  }
+
+  uploadFile() {
     this.billService.uploadPhoto(this.fileToUpload).subscribe(
       data => {
         this.imagePath = data[0].filename;
-        console.log('dodano zdjecie: ' + data[0].filename);
+        this.setFormValue();
       },
       error => {
-        console.warn('err: ' + error);
+        console.error('err: ', error);
       }
     );
   }
@@ -347,29 +351,24 @@ export class BillCreateComponent implements OnInit {
 
   onSaveBill(): void {
     if (this.billForm.invalid) {
+      console.log(this.billForm);
       return;
     }
     const newBill = this.billForm.value;
     newBill.warranty = this.selectedWarrantyMonth;
-    newBill.imageProductPath =
-      'https://vignette.wikia.nocookie.net/nonsensopedia/images/c/c0/Paragon_czyt.png/revision/latest?cb=20100531220310';
     if (this.mode === 'edit') {
       newBill.updatedAt = new Date();
-      this.billService.updateBill(newBill, this.billId).subscribe(bill => {
-        console.log(bill);
+      newBill.updatedById = this.currentUser;
+      this.billService.updateBill(newBill, this.billId).subscribe(() => {
         this.router.navigate(['/']);
       });
     } else {
       newBill.createdAt = new Date();
       newBill.updatedAt = '';
-      this.billService.createBill(newBill).subscribe((bill: Bill) => {
-        console.log(bill);
+      newBill.createdById = this.currentUser;
+      this.billService.createBill(newBill).subscribe(() => {
         this.router.navigate(['/']);
       });
     }
   }
-
-  // test(value: number | null) {
-  //   return `${value} ${this.yearUnit}`;
-  // }
 }

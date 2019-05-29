@@ -20,7 +20,6 @@ export class LoginComponent implements OnInit {
       password: form.value.password
     };
     this.authService.login(userData).subscribe(res => {
-      console.log(res);
       if (res.token) {
         this.router.navigate(['/']);
       }

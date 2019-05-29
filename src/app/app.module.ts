@@ -36,14 +36,13 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ChangeViewDialogComponent } from './bill/dialogs/change-view-dialog/change-view-dialog.component';
 import { FilterDialogComponent } from './bill/dialogs/filter-dialog/filter-dialog.component';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
-import { DateAdapter } from '@angular/material';
-import { CustomDateAdapter } from './_helpers/custom-date-adapter';
 import { BillPhotoDialogComponent } from './bill/dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import pl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
+import { AuthGuard } from './auth/auth.guard';
 registerLocaleData(pl);
 
 @NgModule({
@@ -96,7 +95,8 @@ registerLocaleData(pl);
     // { provide: DateAdapter, useClass: CustomDateAdapter },
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
     { provide: LOCALE_ID, useValue: 'pl' },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    AuthGuard
   ],
   bootstrap: [AppComponent],
   entryComponents: [ChangeViewDialogComponent, FilterDialogComponent, BillPhotoDialogComponent]

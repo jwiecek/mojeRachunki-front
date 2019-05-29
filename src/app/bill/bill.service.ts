@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { Bill } from './bill.model';
 
 @Injectable({
@@ -25,15 +24,15 @@ export class BillService {
   public resultCount = new BehaviorSubject<number>(0);
 
   constructor(private http: HttpClient) {
-    this.loggedUserId = this.getLoggedUserId();
+    this.loggedUserId = BillService.getLoggedUserId();
   }
 
-  getLoggedUserId(): number {
+  static getLoggedUserId(): number {
     return JSON.parse(localStorage.getItem('currentUser')).userId;
   }
   getBills() {
     // return this.http.get(`${this.API_URL}/bills/all`).pipe(tap(bill => new Bill(bill)));
-    return this.http.get(`${this.API_URL}/bills/all`);
+    return this.http.get(`${this.API_URL}/bills/allUserBills`);
   }
 
   createBill(bill: Bill) {
@@ -43,8 +42,7 @@ export class BillService {
   }
 
   updateBill(bill: Bill, id: string) {
-    const newBill = bill;
-    newBill.updatedById = this.loggedUserId;
+    bill.updatedById = this.loggedUserId;
     return this.http.put(`${this.API_URL}/bills/update?id=${id}`, bill);
   }
 

@@ -1,9 +1,9 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BillService } from '../bill.service';
 import { TagService } from '../../tag/tag.service';
 import { Bill } from '../bill.model';
 import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
@@ -72,10 +72,8 @@ export class BillListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();
-    console.log(this.userIsAuthenticated);
     this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
       this.userIsAuthenticated = isAuthenticated;
-      console.log(this.userIsAuthenticated);
     });
 
     this.searchForm = new FormGroup({
@@ -260,7 +258,7 @@ export class BillListComponent implements OnInit, OnDestroy {
 
   removeBill(id: string): void {
     this.billsService.removeBill(id).subscribe(
-      res => {
+      () => {
         this.getBills();
       },
       error => console.warn('err: ' + error)
@@ -279,7 +277,6 @@ export class BillListComponent implements OnInit, OnDestroy {
   }
 
   editBill(bill) {
-    console.log(bill._id);
     this.router.navigate(['./edit/', bill._id]);
   }
 

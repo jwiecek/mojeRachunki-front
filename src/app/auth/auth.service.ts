@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { AuthData } from './auth-data.model';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { User } from './user.model';
 import { Router } from '@angular/router';
 
@@ -14,6 +13,7 @@ export class AuthService {
 
   private isAuthenticated = false;
   private token: string;
+  userId: string;
   private authStatusListener = new Subject<boolean>();
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -28,6 +28,7 @@ export class AuthService {
         if (user && user.token) {
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.token = user.token;
+          this.userId = user.userId;
           this.isAuthenticated = true;
           this.authStatusListener.next(true);
         }

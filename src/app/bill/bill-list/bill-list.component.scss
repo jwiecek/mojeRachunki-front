@@ -8,7 +8,6 @@
   .search-tags-box {
     width: max-content;
     height: 70px;
-    //overflow: auto;
     span{
       font-size: 11px;
       margin-left: 10px;
@@ -112,7 +111,6 @@ mat-toolbar {
   background: #655BF0;
   position: sticky;
   top: 0;
-  //z-index: 20;
 
   .logo {
     position: relative;
@@ -174,6 +172,10 @@ app-toolbar{
   position: relative;
   right: 15px;
   bottom: 5px;
+}
+
+.action-button-box{
+  width: 100%;
 }
 
 

@@ -11,19 +11,19 @@
       <button mat-stroked-button type="button" (click)="filePicker.click()">wybierz zdjęcie paragonu</button>
       <input type="file" #filePicker (change)="onImagePicked($event.target.files)">
     </div>
-    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && billForm.get('imageBillPath').valid">
-      <img [src]="imagePreview" [alt]="billForm.value.product">
-    </div>
-    <div>
-      <h2>2</h2><span> (niewymagane)</span>
-    </div>
-    <div>
-      <button mat-stroked-button type="button" (click)="filePicker.click()">wybierz zdjęcie produktu</button>
-      <!--<input type="file" #filePicker (change)="onImagePicked($event)">-->
-    </div>
-    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
-      <img [src]="imagePreview" [alt]="billForm.value.title">
-    </div>
+    <!--<div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && billForm.get('imageBillPath').valid">-->
+      <!--<img [src]="imagePreview" [alt]="billForm.value.product">-->
+    <!--</div>-->
+    <!--<div>-->
+      <!--<h2>2</h2><span> (niewymagane)</span>-->
+    <!--</div>-->
+    <!--<div>-->
+      <!--<button mat-stroked-button type="button" (click)="filePicker.click()">wybierz zdjęcie produktu</button>-->
+      <!--&lt;!&ndash;<input type="file" #filePicker (change)="onImagePicked($event)">&ndash;&gt;-->
+    <!--</div>-->
+    <!--<div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">-->
+      <!--<img [src]="imagePreview" [alt]="billForm.value.title">-->
+    <!--</div>-->
   </div>
 
   <div class="block-form" [hidden]="counter !== 1 || mobile">
