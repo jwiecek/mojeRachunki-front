@@ -19,7 +19,7 @@ export class BillService {
   ]);
   public filtersChanged$ = new BehaviorSubject<string>('');
   public selectedWarranty = new BehaviorSubject<string>('');
-  public selectedCategory = new BehaviorSubject<object>([]);
+  public selectedCategory = new BehaviorSubject<Array<string>>([]);
   public selectedPrice = new BehaviorSubject<object>([]);
   public resultCount = new BehaviorSubject<number>(0);
 

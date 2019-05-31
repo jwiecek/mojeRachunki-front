@@ -7,7 +7,7 @@
 
   .search-tags-box {
     width: max-content;
-    height: 70px;
+    height: 50px;
     span{
       font-size: 11px;
       margin-left: 10px;
@@ -30,7 +30,7 @@
   }
 
   .main-list-block{
-    height: calc(100vh - 80px);
+    height: calc(100vh - 150px);
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 
@@ -99,10 +99,18 @@
     }
 
   }
+  ::ng-deep{
+    .mat-chip-list-wrapper{
+      overflow-x: auto;
+      margin:0;
+    }
+    div.mat-chip-list-wrapper{
+      display: block !important;
+    }
+  }
+
   mat-chip-list {
     max-width: 100vw;
-    overflow-x: auto;
-    overflow-y: hidden;
   }
 
 }
@@ -111,11 +119,7 @@ mat-toolbar {
   background: #655BF0;
   position: sticky;
   top: 0;
-
-  .logo {
-    position: relative;
-    top: 2px;
-  }
+  padding-right: 20px;
 
   ul {
     list-style: none;
@@ -138,26 +142,26 @@ mat-toolbar {
     margin-right: 10px;
   }
   span {
-    font-family: 'Calligraffitti', cursive;
+    font-family: 'Sue Ellen Francisco', cursive;
+    font-size: 23px;
   }
 
   form{
     .mat-form-field{
       width:100%;
       font-size: 16px;
+      left: -10px;
     }
   }
 
-}
-
-
-
-::ng-deep{
-  .my-chip-list{
-    div.mat-chip-list-wrapper{
-      display: block !important;
-    }
+  mat-icon.mat-icon.back-button{
+    font-size: 30px;
+    position: relative;
+    top: -2px;
+    margin-left: -10px;
+    margin-right: 15px;
   }
+
 }
 
 app-toolbar{
@@ -172,6 +176,7 @@ app-toolbar{
   position: relative;
   right: 15px;
   bottom: 5px;
+  margin-right: -20px;
 }
 
 .action-button-box{

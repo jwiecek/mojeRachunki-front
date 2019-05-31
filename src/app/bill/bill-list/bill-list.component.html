@@ -1,25 +1,27 @@
 <mat-toolbar color="primary">
-  <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+  <button *ngIf="searchIsClicked" (click)="searchIsClicked = false" mat-button><mat-icon class="back-button">keyboard_arrow_left</mat-icon></button>
+  <button *ngIf="!searchIsClicked" mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="onLogout()" *ngIf="userIsAuthenticated">Wyloguj</button>
+    <button mat-menu-item>Kontakt</button>
+    <button mat-menu-item (click)="onLogout()">Wyloguj</button>
   </mat-menu>
-  <span *ngIf="!searchIsClicked" (click)="refresh()" class="logo"><a><span>mam</span> RACHUNKI</a></span>
+  <span *ngIf="!searchIsClicked" (click)="refresh()" class="logo"><a><span>po</span>RACHUNKI</a></span>
   <span *ngIf="!searchIsClicked" class="spacer"></span>
-  <span *ngIf="!searchIsClicked" (click)="searchIsClicked = true"><mat-icon class="search" matSuffix>search</mat-icon></span>
+  <span *ngIf="!searchIsClicked" (click)="searchIsClicked = true;"><mat-icon class="search" matSuffix>search</mat-icon></span>
   <span [hidden]="!searchIsClicked" class="spacer">
     <form [formGroup]="searchForm">
       <mat-form-field>
-        <span class="searchIcon" (click)="searchIsClicked = false" matPrefix><mat-icon class="search" matSuffix>search</mat-icon></span>
+        <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value = ''; clearSearchInput()">
+          <mat-icon>close</mat-icon>
+        </button>
+        <!--<mat-icon class="search" matPrefix>search</mat-icon>-->
         <mat-label></mat-label>
-        <input type="text" #searchRef aria-label="search" matInput formControlName="search" [matAutocomplete]="auto" [(ngModel)]="value" >
+        <input autofocus type="text" #searchRef aria-label="search" matInput formControlName="search" [matAutocomplete]="auto" [(ngModel)]="value" >
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getSelectedValue($event.option.value)">
             <mat-option *ngFor="let option of searchOptions" [value]="option._id">
               {{option._id}} ({{option.idList.length}})
             </mat-option>
         </mat-autocomplete>
-        <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value = ''; clearSearchInput()">
-          <mat-icon>close</mat-icon>
-        </button>
       </mat-form-field>
     </form>
   </span>

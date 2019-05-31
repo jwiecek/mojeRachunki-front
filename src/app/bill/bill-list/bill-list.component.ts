@@ -156,7 +156,7 @@ export class BillListComponent implements OnInit, OnDestroy {
         error => console.warn('err: ' + error)
       );
     } else {
-      this.searchOptions = [];
+      this.clearSearchInput();
     }
   }
 

@@ -9,11 +9,14 @@
     <h2>1</h2>
     <div>
       <button mat-stroked-button type="button" (click)="filePicker.click()">wybierz zdjęcie paragonu</button>
-      <input type="file" #filePicker (change)="onImagePicked($event.target.files)">
+      <input type="file" #filePicker (change)="onImagePicked($event)">
     </div>
-    <!--<div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && billForm.get('imageBillPath').valid">-->
-      <!--<img [src]="imagePreview" [alt]="billForm.value.product">-->
-    <!--</div>-->
+    <div *ngIf="!imagePreview && selectedBillPhotoUrl">
+      <img [src]="selectedBillPhotoUrl" alt="rachunek">
+    </div>
+    <div *ngIf="imagePreview !== '' && imagePreview && billForm.get('imageBillPath').valid">
+      <img [src]="imagePreview" [alt]="billForm.value.product">
+    </div>
     <!--<div>-->
       <!--<h2>2</h2><span> (niewymagane)</span>-->
     <!--</div>-->

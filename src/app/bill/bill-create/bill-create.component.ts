@@ -54,6 +54,8 @@ export class BillCreateComponent implements OnInit {
   // yearUnit = 'lat';
   headerName: string;
   currentUser = this.authServices.userId;
+  imagePreview;
+  selectedBillPhotoUrl;
 
   constructor(
     private http: HttpClient,
@@ -116,6 +118,7 @@ export class BillCreateComponent implements OnInit {
       this.selectedProducts = [...bill.product];
       this.selectedBrands = [bill.brand];
       this.selectedShops = [bill.shop];
+      this.selectedBillPhotoUrl = `${this.billService.API_URL}/bills/${bill.imageBillPath}`;
 
       const allSelectedTags = [
         ...this.selectedPurchaseTypes,
@@ -131,7 +134,7 @@ export class BillCreateComponent implements OnInit {
           }
         });
       });
-
+      this.selectedWarrantyMonth = bill.warranty;
       this.billForm.setValue({
         imageBillPath: bill.imageBillPath,
         purchaseDate: bill.purchaseDate,
@@ -140,11 +143,11 @@ export class BillCreateComponent implements OnInit {
         brand: this.selectedBrands,
         shop: this.selectedShops,
         price: this.selectedPrice,
-        warranty: bill.warranty,
+        warranty: bill.warranty >= 24 ? bill.warranty / 12 + 22 : bill.warranty,
         description: bill.description
       });
 
-      this.selectedWarrantyValue = bill.warranty;
+      this.selectedWarrantyValue = bill.warranty >= 24 ? bill.warranty / 12 + 22 : bill.warranty;
       this.changeWarrantyValue();
 
       this.tagsBrand = this.tags.filter(
@@ -174,8 +177,14 @@ export class BillCreateComponent implements OnInit {
   //   this.billService.upload(file).subscribe(res => console.log(res));
   // }
 
-  onImagePicked(files: FileList): void {
-    this.fileToUpload = files.item(0);
+  onImagePicked(event): void {
+    const file = event.target.files[0];
+    this.fileToUpload = (event.target as HTMLInputElement).files.item(0);
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+    };
+    reader.readAsDataURL(file);
     this.uploadFile();
   }
 
