@@ -1,3 +1,44 @@
 mat-form-field{
   width: 100%;
 }
+
+.login-container {
+  height:100%;
+  padding-top: 10vh;
+
+  .logo {
+    color: #7c4dff;
+    text-decoration: none;
+    font-family: 'Baloo Chettan', cursive;
+    font-size: 38px;
+    span {
+      font-family: 'Sue Ellen Francisco', cursive;
+    }
+  }
+
+  h2{
+    margin: 0;
+    font-size: 20px;
+  }
+
+  form{
+    width: 300px;
+    margin-top: 50px;
+
+    button{
+      width:300px;
+      margin-bottom: 60px;
+    }
+
+    a{
+      color:#7c4dff
+    }
+  }
+}
+
+
+
+
+
+
+

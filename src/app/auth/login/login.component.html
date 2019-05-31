@@ -1,4 +1,6 @@
-<mat-card>
+<div fxLayout="column" fxLayoutAlign="start center" class="login-container">
+  <span class="logo"><span>po</span>RACHUNKI</span>
+
   <h2>Logowanie</h2>
   <form (submit)="onLogin(loginForm)" #loginForm="ngForm">
     <mat-form-field>
@@ -9,10 +11,13 @@
       <input matInput type="password" name="password" ngModel #passwordInput="ngModel" placeholder="Hasło" required>
       <mat-error *ngIf="passwordInput.invalid">Wpisz hasło</mat-error>
     </mat-form-field>
-    <button routerLink="/register" type="button" mat-button mat-stroked-button color="primary">Rejestracja</button>
     <button type="submit" mat-button mat-raised-button color="primary">Zaloguj</button>
+
+    <p>Nie masz jeszcze konta? <span><a routerLink="/register">Zarejestruj się</a></span></p>
+    <a>Przypomnij hasło</a>
+
   </form>
-</mat-card>
+</div>
 
 
 
