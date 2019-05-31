@@ -4,4 +4,5 @@ export interface Tag {
   type: string;
   belongToLabel: string[];
   selected?: boolean;
+  createdById?: string;
 }

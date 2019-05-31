@@ -4,42 +4,6 @@
 </mat-toolbar>
 <div class="block">
   <div #target>
-    <h2>Lata gwarancji</h2>
-    <div>
-      <mat-form-field>
-        <mat-chip-list #warrantyList aria-label="Tag selection">
-          <mat-chip *ngFor="let tag of tagsWarranty" [selectable]="selectable"
-                    [removable]="removable" (removed)="removeTag(tag)">
-            {{tag.label}}
-            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-          </mat-chip>
-          <input [matChipInputFor]="warrantyList"
-                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                 [matChipInputAddOnBlur]="addOnBlur"
-                 (matChipInputTokenEnd)="addTag($event, 'warranty', '')">
-        </mat-chip-list>
-      </mat-form-field>
-    </div>
-  </div>
-  <div>
-    <h2>Kwota</h2>
-    <div>
-      <mat-form-field>
-        <mat-chip-list #priceList aria-label="Tag selection">
-          <mat-chip *ngFor="let tag of tagsPrice"
-                    [removable]="removable" (removed)="removeTag(tag)">
-            {{tag.label}}
-            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-          </mat-chip>
-          <input [matChipInputFor]="priceList"
-                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                 [matChipInputAddOnBlur]="addOnBlur"
-                 (matChipInputTokenEnd)="addTag($event, 'price', '')">
-        </mat-chip-list>
-      </mat-form-field>
-    </div>
-  </div>
-  <div>
     <h2>Kategoria</h2>
     <div>
       <mat-form-field>
@@ -114,6 +78,25 @@
       </mat-form-field>
     </div>
   </div>
+  <div>
+    <h2>Kwota</h2>
+    <div>
+      <mat-form-field>
+        <mat-chip-list #priceList aria-label="Tag selection">
+          <mat-chip *ngFor="let tag of tagsPrice"
+                    [removable]="removable" (removed)="removeTag(tag)">
+            {{tag.label}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input [matChipInputFor]="priceList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addTag($event, 'price', '')">
+        </mat-chip-list>
+      </mat-form-field>
+    </div>
+  </div>
+<div>
   <div fxLayout="row" fxLayoutAlign="center none">
     <button class="button-box" mat-icon-button (click)="scroll(target)">
       <mat-icon>keyboard_arrow_up</mat-icon><br><p>na górę</p>

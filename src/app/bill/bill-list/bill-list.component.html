@@ -28,35 +28,35 @@
 </mat-toolbar>
 
 <div class="main-view-container" fxLayout="column" fxLayoutAlign="space-between stretch" *ngIf="userIsAuthenticated">
-  <mat-chip-list *ngIf="selectedCategory.length" aria-label="category tags" class="my-chip-list">
-    <div class="search-tags-box">
-      <span>Kategoria:</span>
-      <mat-chip *ngFor="let category of selectedCategory"
-                                        [removable]="removable" (removed)="removeFilter(category,'category')">
-      {{category}}
-      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-    </mat-chip>
-    </div>
-  </mat-chip-list>
-  <mat-chip-list *ngIf="selectedPrice.length" aria-label="price tags" class="my-chip-list">
-    <div class="search-tags-box">
-      <span>Cena:</span>
-      <mat-chip *ngFor="let price of selectedPrice"
-              [removable]="removable" (removed)="removeFilter(price,'price')">
-      {{price}}
-      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-    </mat-chip>
-    </div>
-  </mat-chip-list>
-  <mat-chip-list *ngIf="selectedWarranty" aria-label="price tags" class="my-chip-list">
-    <div class="search-tags-box">
-      <span>Pozostało gwarancji:</span>
-    <mat-chip [removable]="removable" (removed)="removeFilter(selectedWarranty,'warranty')">
-      {{selectedWarranty}}
-      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-    </mat-chip>
-    </div>
-  </mat-chip-list>
+  <!--<mat-chip-list *ngIf="selectedCategory.length" aria-label="category tags" class="my-chip-list">-->
+    <!--<div class="search-tags-box">-->
+      <!--<span>Kategoria:</span>-->
+      <!--<mat-chip *ngFor="let category of selectedCategory"-->
+                                        <!--[removable]="removable" (removed)="removeFilter(category,'category')">-->
+      <!--{{category}}-->
+      <!--<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>-->
+    <!--</mat-chip>-->
+    <!--</div>-->
+  <!--</mat-chip-list>-->
+  <!--<mat-chip-list *ngIf="selectedPrice.length" aria-label="price tags" class="my-chip-list">-->
+    <!--<div class="search-tags-box">-->
+      <!--<span>Cena:</span>-->
+      <!--<mat-chip *ngFor="let price of selectedPrice"-->
+              <!--[removable]="removable" (removed)="removeFilter(price,'price')">-->
+      <!--{{price}}-->
+      <!--<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>-->
+    <!--</mat-chip>-->
+    <!--</div>-->
+  <!--</mat-chip-list>-->
+  <!--<mat-chip-list *ngIf="selectedWarranty" aria-label="price tags" class="my-chip-list">-->
+    <!--<div class="search-tags-box">-->
+      <!--<span>Pozostało gwarancji:</span>-->
+    <!--<mat-chip [removable]="removable" (removed)="removeFilter(selectedWarranty,'warranty')">-->
+      <!--{{selectedWarranty}}-->
+      <!--<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>-->
+    <!--</mat-chip>-->
+    <!--</div>-->
+  <!--</mat-chip-list>-->
   <div fxLayout="column">
     <ng-template #noItem>
       <div class="no-result-box">
@@ -65,6 +65,37 @@
     </ng-template>
     <div *ngIf="bills.length; else noItem" class="main-list-block" [@listAnimation]="billsLength" >
       <div #target></div>
+      <div>
+        <mat-chip-list *ngIf="selectedCategory.length" aria-label="category tags" class="my-chip-list">
+          <div class="search-tags-box">
+            <span>Kategoria:</span>
+            <mat-chip *ngFor="let category of selectedCategory"
+                      [removable]="removable" (removed)="removeFilter(category,'category')">
+              {{category}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+          </div>
+        </mat-chip-list>
+        <mat-chip-list *ngIf="selectedPrice.length" aria-label="price tags" class="my-chip-list">
+          <div class="search-tags-box">
+            <span>Cena:</span>
+            <mat-chip *ngFor="let price of selectedPrice"
+                      [removable]="removable" (removed)="removeFilter(price,'price')">
+              {{price}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+          </div>
+        </mat-chip-list>
+        <mat-chip-list *ngIf="selectedWarranty" aria-label="price tags" class="my-chip-list">
+          <div class="search-tags-box">
+            <span>Pozostało gwarancji:</span>
+            <mat-chip [removable]="removable" (removed)="removeFilter(selectedWarranty,'warranty')">
+              {{selectedWarranty}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+          </div>
+        </mat-chip-list>
+      </div>
       <mat-card *ngFor="let bill of bills">
         <div fxLayout="row" fxLayoutAlign="space-between center">
           <div fxLayout="column" fxLayoutAlign="center center"  class="date-box">
