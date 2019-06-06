@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { User } from '../user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +10,7 @@ import { User } from '../user.model';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, public router: Router) {}
 
   ngOnInit() {}
 
@@ -18,6 +19,15 @@ export class RegisterComponent implements OnInit {
       return;
     }
     const user: User = { email: form.value.email, password: form.value.password };
-    this.authService.registerUser(user).subscribe(res => console.log(res));
+    this.authService.registerUser(user).subscribe(res => {
+      console.log(res);
+      if (res) {
+        this.authService.login(user).subscribe(userData => {
+          if (userData.token) {
+            this.router.navigate(['/']);
+          }
+        });
+      }
+    });
   }
 }
