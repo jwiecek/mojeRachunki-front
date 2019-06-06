@@ -254,6 +254,7 @@ export class BillListComponent implements OnInit, OnDestroy {
   }
 
   getByFilter(): void {
+    console.log(this.selectedCategory);
     if (this.selectedCategory.length > 0) {
       this.getBillsByCategory(this.searchFilterBills);
       if (this.selectedPrice.length > 0) {
@@ -265,7 +266,6 @@ export class BillListComponent implements OnInit, OnDestroy {
         this.getBillsByPrice(this.searchFilterBills);
       }
     }
-    // this.billService.selectedWarranty.next(this.selectedWarranty);
     this.getBillsByWarranty(this.bills);
     this.billService.resultCount.next(this.bills.length);
   }

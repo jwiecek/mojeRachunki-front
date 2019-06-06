@@ -46,13 +46,12 @@
             brak rachunków
           </div>
         </ng-template>
+        <button *ngIf="!isMobile" mat-stroked-button color="primary" routerLink="/create" class="accent-button">
+          <mat-icon>add_circle</mat-icon>
+          Dodaj rachunek
+        </button>
         <div *ngIf="bills.length; else noItem" class="main-list-block" [@listAnimation]="billsLength" >
           <div #target></div>
-          <button *ngIf="!isMobile" mat-stroked-button color="primary" routerLink="/create">
-            <mat-icon>add_circle</mat-icon>
-            Dodaj rachunek
-          </button>
-
           <div>
             <mat-chip-list *ngIf="selectedCategory.length" aria-label="category tags" class="my-chip-list">
               <div class="search-tags-box">
