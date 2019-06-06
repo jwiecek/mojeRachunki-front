@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { BillService } from '../../bill.service';
 import { Subscription } from 'rxjs';
 import { MatBottomSheetRef } from '@angular/material';
@@ -11,11 +11,26 @@ import { MatBottomSheetRef } from '@angular/material';
 export class ChangeViewDialogComponent implements OnInit, OnDestroy {
   public elementsView;
   private subscriptions: Subscription = new Subscription();
+  isMobile;
 
-  constructor(public billService: BillService, private bottomSheetRef: MatBottomSheetRef<ChangeViewDialogComponent>) {}
+  constructor(
+    public billService: BillService,
+    private bottomSheetRef: MatBottomSheetRef<ChangeViewDialogComponent>
+  ) {}
 
   ngOnInit() {
-    this.subscriptions.add(this.billService.elementsView.subscribe(elements => (this.elementsView = elements)));
+    this.onResize();
+    this.subscriptions.add(
+      this.billService.elementsView.subscribe(
+        elements => (this.elementsView = elements)
+      )
+    );
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    const innerWidth = window.innerWidth;
+    this.isMobile = innerWidth < 660;
   }
 
   setElementView(): void {

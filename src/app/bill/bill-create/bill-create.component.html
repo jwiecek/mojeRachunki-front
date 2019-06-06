@@ -4,8 +4,9 @@
 </mat-toolbar>
 
 <form [formGroup]="billForm" novalidate (submit)="onSaveBill()">
-  <div class="block-form" *ngIf="counter === 0 || mobile">
-    <h2>Wybierz zdjęcia: </h2>
+  <h2 *ngIf="!isMobile">Edycja rachunku</h2>
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 0 || !isMobile || mode === 'edit'">
+    <h2>Wybierz zdjęcie </h2>
     <h2>1</h2>
     <div>
       <button mat-stroked-button type="button" (click)="filePicker.click()">wybierz zdjęcie paragonu</button>
@@ -29,7 +30,7 @@
     <!--</div>-->
   </div>
 
-  <div class="block-form" [hidden]="counter !== 1 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" [hidden]="counter !== 1 && isMobile && mode === 'create'">
     <h2>Data zakupu</h2>
     <div>
       <mat-form-field class="example-full-width">
@@ -44,7 +45,7 @@
     </div>
   </div>
 
-  <div class="block-form" [hidden]="counter !== 2 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" [hidden]="counter !== 2 && isMobile && mode === 'create'">
 
     <h2>Lata gwarancji</h2>
     <p>{{selectedWarrantyLabel}} {{time}}</p>
@@ -61,7 +62,7 @@
   </div>
 
 
-  <div class="block-form" *ngIf="counter === 3 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 3 || !isMobile || mode === 'edit'">
     <h2>Kwota</h2>
     <div>
       <mat-form-field>
@@ -80,7 +81,7 @@
     </div>
   </div>
 
-  <div class="block-form" *ngIf="counter === 4 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 4 || !isMobile || mode === 'edit'">
     <h2>Kategoria produktu</h2>
     <div>
       <mat-form-field>
@@ -99,7 +100,7 @@
     </div>
   </div>
 
-  <div class="block-form" *ngIf="counter === 5 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 5 || !isMobile || mode === 'edit'">
     <h2>Produkt</h2>
     <span>(możesz wybrać kilka)</span>
     <div>
@@ -120,7 +121,7 @@
   </div>
 
 
-  <div class="block-form" *ngIf="counter === 6 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 6 || !isMobile || mode === 'edit'">
     <h2>Marka</h2>
     <span>(możesz wybrać kilka / niewymagane)</span>
     <div>
@@ -140,7 +141,7 @@
     </div>
   </div>
 
-  <div class="block-form" *ngIf="counter === 7 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 7 || !isMobile || mode === 'edit'">
     <h2>Sklep</h2>
     <span>(niewymagane)</span>
     <div>
@@ -160,7 +161,7 @@
     </div>
   </div>
 
-  <div class="block-form" *ngIf="counter === 8 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 8 || !isMobile || mode === 'edit'">
     <h2>Opis</h2>
     <span>(niewymagane)</span>
     <div>
@@ -170,7 +171,7 @@
     </div>
   </div>
 
-  <div class="block-form" *ngIf="counter === 9 || mobile">
+  <div [ngClass]="{'block-form-mobile': isMobile, 'block-form': !isMobile}" *ngIf="counter === 9 && isMobile && mode === 'create'">
     <h2>Podsumowanie</h2>
     <p>Data zakupu: {{billForm.value.purchaseDate | date}}</p>
     <p>Kwota: {{billForm.value.price}}</p>
@@ -182,17 +183,17 @@
     <p>Opis: {{billForm.value.description}}</p>
   </div>
 
-  <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+  <mat-progress-bar *ngIf="isMobile && this.mode=== 'create'" mode="determinate" [value]="progress"></mat-progress-bar>
 
 
   <div fxLayout="row">
-    <button *ngIf="counter > 0 || mobile " type="button" mat-stroked-button color="none"
+    <button *ngIf="counter > 0 && isMobile && mode === 'create'" type="button" mat-stroked-button color="none"
             (click)="previous()"><mat-icon>chevron_left</mat-icon>Wstecz</button>
     <div fxFlex></div>
     <div style="color:red; margin-left:20px">{{alert}}</div>
-    <button *ngIf="(mode ==='edit' && (counter < 9))|| canNext[counter] && (counter < 9) || mobile" type="button"
+    <button *ngIf="((mode ==='edit' && (counter < 9)) || canNext[counter] && (counter < 9)) && isMobile && mode === 'create' " type="button"
             mat-stroked-button color="primary" (click)="next()">Dalej<mat-icon>chevron_right</mat-icon></button>
-    <button *ngIf="counter === 9|| mobile" type="submit" mat-flat-button color="primary"><span *ngIf="mode !== 'edit'"> Zapisz</span><span *ngIf="mode === 'edit'"> Zaktualizuj</span> paragon</button>
+    <button *ngIf="counter === 9 || mode === 'edit' || !isMobile" type="submit" mat-flat-button color="primary"><span *ngIf="mode !== 'edit'"> Zapisz</span><span *ngIf="mode === 'edit'"> Zaktualizuj</span> <span> paragon</span></button>
   </div>
 
 </form>

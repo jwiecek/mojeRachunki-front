@@ -56,6 +56,10 @@
 
       button {
         margin: 0 5px !important;
+        span{
+          position: relative;
+          bottom: 14px;
+        }
       }
 
       .mat-icon {
@@ -82,7 +86,7 @@
       }
     }
 
-    button{
+    .my-chip-list button{
       min-width: 43px;
       max-width:70px;
     }
@@ -138,10 +142,16 @@ mat-toolbar {
     position: relative;
     top:5px;
     margin-right: 10px;
+    cursor: pointer;
   }
   span {
     font-family: 'Sue Ellen Francisco', cursive;
     font-size: 23px;
+  }
+
+  button {
+    min-width: fit-content;
+    margin-left: 10px;
   }
 
   form{
@@ -160,6 +170,9 @@ mat-toolbar {
     margin-right: 15px;
   }
 
+  .logo{
+    cursor: pointer;
+  }
 }
 
 app-toolbar{
@@ -177,9 +190,13 @@ app-toolbar{
   margin-right: -20px;
 }
 
-.action-button-box{
-  width: 100%;
+.filter-left-container {
+  margin-top: 20px;
+  background: #fff;
+  padding: 20px;
+  width: 300px;
 }
+
 
 
 

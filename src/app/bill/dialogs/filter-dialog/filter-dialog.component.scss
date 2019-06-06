@@ -10,7 +10,7 @@ button {
 
 h3{
   color: #655BF0;
-  margin:0px;
+  margin:0;
 }
 
 .checkbox-list {
@@ -19,4 +19,18 @@ h3{
 
 .mat-divider {
   margin-top: 7px;
+}
+
+.main-container-desktop {
+  height: auto;
+}
+
+.main-container-mobile {
+  height: 55vh; overflow: auto;
+}
+
+::ng-deep{
+  .mat-expansion-panel {
+    box-shadow: none !important;
+  }
 }

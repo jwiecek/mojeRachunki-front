@@ -12,8 +12,23 @@ mat-toolbar {
     text-decoration: none;
   }
 }
+.block-form{
+  height: auto;
+  background: #fff;
+  padding: 20px;
+  .selected-tag{
+    background-color: #655BF0;
+    color: #ffffff;
+  }
 
-.block-form {
+  .mat-form-field {
+    width: 100%;
+  }
+  .mat-slider-horizontal {
+    width: 300px;
+  }
+}
+.block-form-mobile {
   height: calc(100vh - 180px);
   background: #fff;
   padding: 20px;

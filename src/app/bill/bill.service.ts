@@ -17,11 +17,23 @@ export class BillService {
     { description: false },
     { warrantyEndDate: false }
   ]);
-  public filtersChanged$ = new BehaviorSubject<string>('');
-  public selectedWarranty = new BehaviorSubject<string>('');
+  // public filtersChanged = new BehaviorSubject<FilterInterface>({
+  //   selectedCategory: [],
+  //   selectedPrice: [],
+  //   selectedWarrantyOption: WarrantyOptionsEnum.RANGE,
+  //   selectedWarrantyFrom: null,
+  //   selectedWarrantyTo: null,
+  //   resultCount: null
+  // });
+
+  // public selectedWarranty = new BehaviorSubject<any>(null);
+
+  public selectedWarranty = new BehaviorSubject<string>(null);
   public selectedCategory = new BehaviorSubject<Array<string>>([]);
   public selectedPrice = new BehaviorSubject<object>([]);
   public resultCount = new BehaviorSubject<number>(0);
+  public warrantyFrom = new BehaviorSubject<any>(null);
+  public warrantyTo = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) {
     this.loggedUserId = BillService.getLoggedUserId();
@@ -64,7 +76,7 @@ export class BillService {
     return this.http.post(`${this.API_URL}/bills/uploadPhoto`, formData);
   }
 
-  getPhoto(imgPath: string) {
-    return this.http.get(`${this.API_URL}/bills/${imgPath}`);
-  }
+  // getPhoto(imgPath: string) {
+  //   return this.http.get(`${this.API_URL}/bills/${imgPath}`);
+  // }
 }

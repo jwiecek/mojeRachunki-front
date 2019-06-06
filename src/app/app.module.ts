@@ -9,6 +9,7 @@ import { BillListComponent } from './bill/bill-list/bill-list.component';
 import {
   MatAutocompleteModule,
   MatBottomSheetModule,
+  MatBottomSheetRef,
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
@@ -35,7 +36,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ChangeViewDialogComponent } from './bill/dialogs/change-view-dialog/change-view-dialog.component';
 import { FilterDialogComponent } from './bill/dialogs/filter-dialog/filter-dialog.component';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
+import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MatMomentDateModule
+} from '@angular/material-moment-adapter';
 import { BillPhotoDialogComponent } from './bill/dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import pl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
@@ -96,9 +100,14 @@ registerLocaleData(pl);
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
     { provide: LOCALE_ID, useValue: 'pl' },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    AuthGuard
+    AuthGuard,
+    { provide: MatBottomSheetRef, useValue: {} }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ChangeViewDialogComponent, FilterDialogComponent, BillPhotoDialogComponent]
+  entryComponents: [
+    ChangeViewDialogComponent,
+    FilterDialogComponent,
+    BillPhotoDialogComponent
+  ]
 })
 export class AppModule {}

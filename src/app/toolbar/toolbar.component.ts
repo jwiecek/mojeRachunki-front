@@ -13,17 +13,22 @@ import { Output } from '@angular/core';
 })
 export class ToolbarComponent {
   @Output() onViewByWarranty = new EventEmitter<void>();
-  @Output() onViewGetBillsByWarrantyOneMonth = new EventEmitter<void>();
+  // @Output() onViewGetBillsByWarrantyOneMonth = new EventEmitter<void>();
   @Input() billsWarrantyInMonthLength: number;
 
-  constructor(private billService: BillService, private bottomSheet: MatBottomSheet) {}
+  constructor(
+    private billService: BillService,
+    private bottomSheet: MatBottomSheet
+  ) {}
 
   changeView(): void {
     this.bottomSheet.open(ChangeViewDialogComponent);
   }
 
   changeViewByWarranty(): void {
-    this.billService.selectedWarranty.next(WarrantyOptionsEnum.END_IN_ONE_MONTH);
+    this.billService.selectedWarranty.next(
+      WarrantyOptionsEnum.END_IN_ONE_MONTH
+    );
     this.billService.selectedCategory.next([]);
     this.billService.selectedPrice.next([]);
     this.onViewByWarranty.emit();

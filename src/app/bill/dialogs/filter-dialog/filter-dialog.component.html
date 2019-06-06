@@ -1,6 +1,6 @@
 <div class="mat-typography">
   <h2>Filtrowanie: </h2>
-  <div style="height: 55vh; overflow: auto">
+  <div [ngClass]="{'main-container-mobile': isMobile, 'main-container-desktop': !isMobile}">
     <mat-accordion>
       <mat-expansion-panel [expanded]="true">
         <mat-expansion-panel-header>
@@ -29,6 +29,18 @@
             </mat-radio-group>
             <mat-divider></mat-divider>
           </div>
+        <form [formGroup]="warrantyForm" [hidden]="selectedWarranty !== 'zakres'">
+          <mat-form-field>
+            <input matInput (dateChange)="setWarrantyRange(warrantyForm.get('fromWarranty').value, 'from')" [matDatepicker]="pickerFromWarranty" placeholder="od" formControlName="fromWarranty">
+            <mat-datepicker-toggle matSuffix [for]="pickerFromWarranty"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #pickerFromWarranty></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field >
+            <input matInput (dateChange)="setWarrantyRange(warrantyForm.get('toWarranty').value, 'to')" [matDatepicker]="pickerToWarranty" placeholder="do" formControlName="toWarranty">
+            <mat-datepicker-toggle matSuffix [for]="pickerToWarranty"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #pickerToWarranty></mat-datepicker>
+          </mat-form-field>
+        </form>
       </mat-expansion-panel>
     </mat-accordion>
     <mat-accordion>
@@ -69,7 +81,7 @@
 
   </div>
 
-  <div>
+  <div *ngIf="isMobile">
     <button mat-flat-button color="primary" (click)="openLink($event)">Pokaż wyniki ({{resultCount}})</button>
   </div>
 </div>
