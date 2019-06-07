@@ -22,14 +22,14 @@
           <h3>Pozostało gwarancji</h3>
         </mat-expansion-panel-header>
           <div *ngFor="let option of warrantyOptions" class="checkbox-list" >
-            <mat-radio-group [(ngModel)]="selectedWarranty">
+            <mat-radio-group [(ngModel)]="filter.selectedWarranty">
               <mat-radio-button [value]="option" (change)="setWarrantyOption(option)" color="primary">
                 {{option}}
               </mat-radio-button>
             </mat-radio-group>
             <mat-divider></mat-divider>
           </div>
-        <form [formGroup]="warrantyForm" [hidden]="selectedWarranty !== 'zakres'">
+        <form [formGroup]="warrantyForm" [hidden]="filter.selectedWarranty !== 'zakres'">
           <mat-form-field>
             <input matInput (dateChange)="setWarrantyRange(warrantyForm.get('fromWarranty').value, 'from')" [matDatepicker]="pickerFromWarranty" placeholder="od" formControlName="fromWarranty">
             <mat-datepicker-toggle matSuffix [for]="pickerFromWarranty"></mat-datepicker-toggle>
@@ -82,8 +82,6 @@
   </div>
 
   <div *ngIf="isMobile">
-    <button mat-flat-button color="primary" (click)="openLink($event)">Pokaż wyniki ({{resultCount}})</button>
+    <button mat-flat-button color="primary" (click)="openLink($event)">Pokaż wyniki ({{filter.resultCount}})</button>
   </div>
 </div>
-
-

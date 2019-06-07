@@ -10,6 +10,7 @@ import { MatChipInputEvent, MatSliderChange } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { mimeType } from './mime-type.validator';
 import { AuthService } from '../../auth/auth.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-bill-create',
@@ -56,6 +57,7 @@ export class BillCreateComponent implements OnInit {
   imagePreview;
   selectedBillPhotoUrl;
   isMobile: boolean;
+  allSelectedTags = [];
 
   constructor(
     private http: HttpClient,
@@ -69,17 +71,23 @@ export class BillCreateComponent implements OnInit {
   ngOnInit() {
     this.counter = 0;
     this.onResize();
-    this.getTags();
 
     this.route.params.subscribe(params => {
       if (params.billId) {
         this.mode = 'edit';
         this.headerName = 'Edycja';
         this.billId = params.billId;
-        this.getSelectedBill(this.billId);
+        const getTags = this.tagService.getTags();
+        const getSelectedBill = this.billService.getBillById(this.billId);
+        forkJoin(getTags, getSelectedBill).subscribe(([tags, bills]) => {
+          this.tags = tags;
+          this.getTags();
+          this.getSelectedBill(bills);
+        });
       } else {
         this.mode = 'create';
         this.headerName = 'Dodawanie';
+        this.getTags();
       }
     });
     this.billForm = new FormGroup({
@@ -114,88 +122,55 @@ export class BillCreateComponent implements OnInit {
     this.isMobile = innerWidth < 600;
   }
 
-  getSelectedBill(id): void {
-    this.billService.getBillById(id).subscribe((bill: Bill) => {
-      this.selectedPurchaseTypes = [bill.purchaseType];
-      this.selectedPrice = [bill.price];
-      this.selectedProducts = [...bill.product];
-      this.selectedBrands = [bill.brand];
-      this.selectedShops = [bill.shop];
-      this.selectedBillPhotoUrl = `${this.billService.API_URL}/bills/${
-        bill.imageBillPath
-      }`;
+  getSelectedBill(bill): void {
+    this.selectedPurchaseTypes = [bill.purchaseType];
+    this.selectedPrice = [bill.price];
+    this.selectedProducts = [...bill.product];
+    this.selectedBrands = [bill.brand];
+    this.selectedShops = [bill.shop];
+    this.selectedBillPhotoUrl = `${this.billService.API_URL}/bills/${bill.imageBillPath}`;
+    this.selectedWarrantyMonth = bill.warranty;
+    this.billForm.setValue({
+      imageBillPath: bill.imageBillPath,
+      purchaseDate: bill.purchaseDate,
+      purchaseType: this.selectedPurchaseTypes,
+      product: this.selectedProducts,
+      brand: this.selectedBrands,
+      shop: this.selectedShops,
+      price: this.selectedPrice,
+      warranty: bill.warranty >= 24 ? bill.warranty / 12 + 22 : bill.warranty,
+      description: bill.description
+    });
 
-      const allSelectedTags = [
-        ...this.selectedPurchaseTypes,
-        ...this.selectedPrice,
-        ...this.selectedProducts,
-        ...this.selectedBrands,
-        ...this.selectedShops
-      ];
-      setTimeout(() => {
-        allSelectedTags.forEach(tag => {
-          this.tags.forEach(t => {
-            if (tag === t.label) {
-              t.selected = !t.selected;
-            }
-          });
-        });
-      }, 100);
-      this.selectedWarrantyMonth = bill.warranty;
-      this.billForm.setValue({
-        imageBillPath: bill.imageBillPath,
-        purchaseDate: bill.purchaseDate,
-        purchaseType: this.selectedPurchaseTypes,
-        product: this.selectedProducts,
-        brand: this.selectedBrands,
-        shop: this.selectedShops,
-        price: this.selectedPrice,
-        warranty: bill.warranty >= 24 ? bill.warranty / 12 + 22 : bill.warranty,
-        description: bill.description
+    this.selectedWarrantyValue = bill.warranty >= 24 ? bill.warranty / 12 + 22 : bill.warranty;
+    this.changeWarrantyValue();
+
+    this.tagsBrand = this.tags.filter(
+      t => t.type === 'brand' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
+    );
+    this.tagsProduct = this.tags.filter(
+      t => t.type === 'product' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
+    );
+    this.tagsShop = this.tags.filter(
+      t => t.type === 'shop' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
+    );
+
+    const allSelectedTags = [
+      ...this.selectedPurchaseTypes,
+      ...this.selectedPrice,
+      ...this.selectedProducts,
+      ...this.selectedBrands,
+      ...this.selectedShops
+    ];
+
+    allSelectedTags.forEach(tag => {
+      this.tags.forEach(t => {
+        if (tag === t.label) {
+          t.selected = !t.selected;
+        }
       });
-
-      this.selectedWarrantyValue =
-        bill.warranty >= 24 ? bill.warranty / 12 + 22 : bill.warranty;
-      this.changeWarrantyValue();
-
-      this.tagsBrand = this.tags.filter(
-        t =>
-          t.type === 'brand' &&
-          t.belongToLabel.some(label =>
-            this.selectedPurchaseTypes.some(l => l === label)
-          )
-      );
-      this.tagsProduct = this.tags.filter(
-        t =>
-          t.type === 'product' &&
-          t.belongToLabel.some(label =>
-            this.selectedPurchaseTypes.some(l => l === label)
-          )
-      );
-      this.tagsShop = this.tags.filter(
-        t =>
-          t.type === 'shop' &&
-          t.belongToLabel.some(label =>
-            this.selectedPurchaseTypes.some(l => l === label)
-          )
-      );
     });
   }
-
-  // onImagePicked(event: Event) {
-  //   const file = (event.target as HTMLInputElement).files[0];
-  //   // this.billForm.patchValue({ imageBillPath: file }); // patchValue == single; setValue === all
-  //   // this.billForm.get('imageBillPath').updateValueAndValidity();
-  //   // const reader = new FileReader();
-  //   // reader.onload = () => {
-  //   //   // @ts-ignore
-  //   //   this.imagePreview = reader.result;
-  //   // };
-  //   // reader.readAsDataURL(file);
-  //   // console.log(file);
-  //   // console.log(reader);
-  //   this.billService.upload(file).subscribe(res => console.log(res));
-  // }
 
   onImagePicked(event): void {
     const file = event.target.files[0];
@@ -262,19 +237,14 @@ export class BillCreateComponent implements OnInit {
       if (this.selectedWarrantyValue >= 54) {
         this.selectedWarrantyLabel = 'dożywotnio';
         this.time = '';
-        document.getElementsByClassName(
-          'mat-slider-thumb-label-text'
-        )[0].innerHTML = '*';
+        document.getElementsByClassName('mat-slider-thumb-label-text')[0].innerHTML = '*';
       }
     }
   }
 
   getTags(): void {
-    this.tagService.getTags().subscribe((tags: Tag[]) => {
-      this.tags = tags;
-      this.tags.forEach(t => (t.selected = false));
-      this.getTagsByType();
-    });
+    this.tags.forEach(t => (t.selected = false));
+    this.getTagsByType();
   }
 
   selectTag(tag: Tag, multiple: boolean): void {
@@ -296,51 +266,27 @@ export class BillCreateComponent implements OnInit {
   }
 
   filterSelectedTags() {
-    this.selectedPurchaseTypes = this.tagsPurchaseType
-      .filter(t => t.selected === true)
-      .map(t => t.label);
-    this.selectedPrice = this.tagsPrice
-      .filter(t => t.selected === true)
-      .map(t => t.label);
-    this.selectedProducts = this.tagsProduct
-      .filter(t => t.selected === true)
-      .map(t => t.label);
-    this.selectedBrands = this.tagsBrand
-      .filter(t => t.selected === true)
-      .map(t => t.label);
-    this.selectedShops = this.tagsShop
-      .filter(t => t.selected === true)
-      .map(t => t.label);
+    this.selectedPurchaseTypes = this.tagsPurchaseType.filter(t => t.selected === true).map(t => t.label);
+    this.selectedPrice = this.tagsPrice.filter(t => t.selected === true).map(t => t.label);
+    this.selectedProducts = this.tagsProduct.filter(t => t.selected === true).map(t => t.label);
+    this.selectedBrands = this.tagsBrand.filter(t => t.selected === true).map(t => t.label);
+    this.selectedShops = this.tagsShop.filter(t => t.selected === true).map(t => t.label);
   }
 
   getTagsByType(): void {
-    this.tagsPurchaseType = this.tags.filter(
-      tag => tag.type === 'purchaseType'
-    );
+    this.tagsPurchaseType = this.tags.filter(tag => tag.type === 'purchaseType');
     this.tagsPrice = this.tags.filter(tag => tag.type === 'price');
     this.tagsWarranty = this.tags.filter(tag => tag.type === 'warranty');
 
     if (this.selectedPurchaseTypes) {
       this.tagsBrand = this.tags.filter(
-        t =>
-          t.type === 'brand' &&
-          t.belongToLabel.some(label =>
-            this.selectedPurchaseTypes.some(l => l === label)
-          )
+        t => t.type === 'brand' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
       );
       this.tagsProduct = this.tags.filter(
-        t =>
-          t.type === 'product' &&
-          t.belongToLabel.some(label =>
-            this.selectedPurchaseTypes.some(l => l === label)
-          )
+        t => t.type === 'product' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
       );
       this.tagsShop = this.tags.filter(
-        t =>
-          t.type === 'shop' &&
-          t.belongToLabel.some(label =>
-            this.selectedPurchaseTypes.some(l => l === label)
-          )
+        t => t.type === 'shop' && t.belongToLabel.some(label => this.selectedPurchaseTypes.some(l => l === label))
       );
     }
   }
@@ -412,7 +358,9 @@ export class BillCreateComponent implements OnInit {
       return;
     }
     const newBill = this.billForm.value;
+    const purchaseDate = new Date(this.billForm.get('purchaseDate').value);
     newBill.warranty = this.selectedWarrantyMonth;
+    newBill.warrantyEndDate = new Date(purchaseDate.setMonth(purchaseDate.getMonth() + this.selectedWarrantyMonth));
     if (this.mode === 'edit') {
       newBill.updatedAt = new Date();
       newBill.updatedById = this.currentUser;

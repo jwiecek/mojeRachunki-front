@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BillService } from '../bill.service';
 import { TagService } from '../../tag/tag.service';
 import { Bill } from '../bill.model';
@@ -13,20 +6,14 @@ import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
-import {
-  animate,
-  query,
-  stagger,
-  style,
-  transition,
-  trigger
-} from '@angular/animations';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
 import { Tag } from '../../tag/tag.model';
 import { BillPhotoDialogComponent } from '../dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { FilterInterface } from '../../_interfaces/filter.interface';
 
 @Component({
   selector: 'app-bill-list',
@@ -39,13 +26,7 @@ import { AuthService } from '../../auth/auth.service';
           ':enter',
           [
             style({ opacity: 0, transform: 'translateY(-15px)' }),
-            stagger(
-              '50ms',
-              animate(
-                '550ms ease-out',
-                style({ opacity: 1, transform: 'translateY(0px)' })
-              )
-            )
+            stagger('50ms', animate('550ms ease-out', style({ opacity: 1, transform: 'translateY(0px)' })))
           ],
           { optional: true }
         ),
@@ -61,29 +42,26 @@ export class BillListComponent implements OnInit, OnDestroy {
   public tags = [];
   public billsLength: number;
   private billsCopy: Bill[] = [];
-  public searchOptions;
+  public searchOptions = [];
   public searchForm: FormGroup;
   @ViewChild('searchRef') searchRef: ElementRef;
   private search: string;
   public elementsView;
-  public selectedWarranty: string;
+  public filter: FilterInterface;
   public billsWarrantyInMonth = 0;
   public selectedCategory: Array<string> = [];
-  public selectedPrice: Array<string> = [];
   private subscriptions: Subscription = new Subscription();
   public searchIsClicked = false;
   public removable = true;
   private today;
   private todayPlusOneMonth;
   private todayPlusOneYear;
-  private searchFilterBills = [];
   value;
   public innerWidth: any;
   isMobile: boolean;
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
-  fromDate;
-  toDate;
+  private searchIdList = [];
 
   constructor(
     private billService: BillService,
@@ -97,11 +75,9 @@ export class BillListComponent implements OnInit, OnDestroy {
     this.onResize();
 
     this.userIsAuthenticated = this.authService.getIsAuth();
-    this.authListenerSubs = this.authService
-      .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
-        this.userIsAuthenticated = isAuthenticated;
-      });
+    this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
+      this.userIsAuthenticated = isAuthenticated;
+    });
 
     this.searchForm = new FormGroup({
       search: new FormControl()
@@ -115,49 +91,16 @@ export class BillListComponent implements OnInit, OnDestroy {
         debounceTime(200),
         distinctUntilChanged()
       )
-      .subscribe(
-        (text: string) => this.showSearchOption(text),
-        error => console.warn('err: ' + error)
-      );
+      .subscribe((text: string) => this.showSearchOption(text), error => console.warn('err: ' + error));
+    this.subscriptions.add(this.billService.elementsView.subscribe(elements => (this.elementsView = elements)));
+
     this.subscriptions.add(
-      this.billService.elementsView.subscribe(
-        elements => (this.elementsView = elements)
-      )
-    );
-    this.subscriptions.add(
-      this.billService.selectedCategory.subscribe((category: Array<string>) => {
-        this.selectedCategory = category;
+      this.billService.currentFilter.subscribe((filter: FilterInterface) => {
+        this.filter = filter;
         this.getByFilter();
       })
     );
 
-    this.subscriptions.add(
-      this.billService.warrantyFrom.subscribe(fromDate => {
-        this.fromDate = fromDate;
-        this.getByFilter();
-      })
-    );
-    this.subscriptions.add(
-      this.billService.warrantyFrom.subscribe(to => {
-        this.toDate = to;
-        this.getByFilter();
-      })
-    );
-    this.subscriptions.add(
-      this.billService.selectedWarranty.subscribe(
-        (warranty: string) => {
-          this.selectedWarranty = warranty;
-          if (warranty === WarrantyOptionsEnum.RANGE) {
-          }
-        },
-        error => console.warn('err: ' + error)
-      )
-    );
-    this.subscriptions.add(
-      this.billService.selectedPrice.subscribe(
-        (price: Array<string>) => (this.selectedPrice = price)
-      )
-    );
     this.today = moment();
     this.todayPlusOneMonth = moment(this.today).add(1, 'months');
     this.todayPlusOneYear = moment(this.today).add(1, 'year');
@@ -177,16 +120,10 @@ export class BillListComponent implements OnInit, OnDestroy {
         this.billsLength = this.bills.length;
         this.billsCopy = [...this.bills];
         this.bills.map((bill: Bill) => {
-          const purchaseDate = new Date(bill.purchaseDate);
-          bill.warrantyEndDate = new Date(
-            purchaseDate.setMonth(purchaseDate.getMonth() + bill.warranty)
-          ).toLocaleString('en-US');
+          bill.warrantyEndDate = new Date(bill.warrantyEndDate).toLocaleString('en-US');
           bill.expand = false;
         });
-        this.bills.sort(
-          (a, b) => +new Date(b.purchaseDate) - +new Date(a.purchaseDate)
-        );
-        this.searchFilterBills = [...this.bills];
+        this.bills.sort((a, b) => +new Date(b.purchaseDate) - +new Date(a.purchaseDate));
         this.getBillsOneMonthWarranty();
       },
       error => console.warn('err: ' + error)
@@ -194,23 +131,14 @@ export class BillListComponent implements OnInit, OnDestroy {
   }
 
   checkIfWarrantyOneMonth(bill: Bill): boolean {
-    return (
-      moment(bill.warrantyEndDate) > this.today &&
-      moment(bill.warrantyEndDate) < this.todayPlusOneMonth
-    );
+    return moment(bill.warrantyEndDate) > this.today && moment(bill.warrantyEndDate) < this.todayPlusOneMonth;
   }
 
   getBillsOneMonthWarranty() {
     this.billsWarrantyInMonth = this.billsCopy.filter(
-      bill =>
-        moment(bill.warrantyEndDate) > this.today &&
-        moment(bill.warrantyEndDate) < this.todayPlusOneMonth
+      bill => moment(bill.warrantyEndDate) > this.today && moment(bill.warrantyEndDate) < this.todayPlusOneMonth
     ).length;
   }
-
-  // getTags(): void {
-  //   this.tagService.getTags().subscribe((tags: Tag[]) => (this.tags = tags), error => console.warn('err: ' + error));
-  // }
 
   getTags(): void {
     this.tagService.getTags().subscribe((userTags: Tag[]) => {
@@ -239,6 +167,7 @@ export class BillListComponent implements OnInit, OnDestroy {
       this.billService.filterBill(this.search).subscribe(
         res => {
           this.searchOptions = res;
+          console.log(res);
         },
         error => console.warn('err: ' + error)
       );
@@ -248,124 +177,61 @@ export class BillListComponent implements OnInit, OnDestroy {
   }
 
   cleanSelected(): void {
-    this.billService.selectedWarranty.next(null);
-    this.billService.selectedPrice.next([]);
-    this.billService.selectedCategory.next([]);
+    this.filter.selectedWarranty = null;
+    this.filter.selectedPrice = [];
+    this.filter.selectedCategory = [];
+    this.billService.filter.next(this.filter);
   }
 
   getByFilter(): void {
-    console.log(this.selectedCategory);
-    if (this.selectedCategory.length > 0) {
-      this.getBillsByCategory(this.searchFilterBills);
-      if (this.selectedPrice.length > 0) {
-        this.getBillsByPrice(this.bills);
-      }
-    } else {
-      this.bills = this.searchFilterBills;
-      if (this.selectedPrice.length > 0) {
-        this.getBillsByPrice(this.searchFilterBills);
-      }
+    this.searchIdList = [];
+    if (this.searchOptions) {
+      this.searchIdList = this.searchOptions.reduce((arr, option) => option.idList, []);
     }
-    this.getBillsByWarranty(this.bills);
-    this.billService.resultCount.next(this.bills.length);
-  }
 
-  getBillsByCategory(bills: Bill[]): void {
-    this.bills = bills.filter((bill: Bill) =>
-      this.selectedCategory.some(
-        category => category === bill.purchaseType.toString()
-      )
-    );
-  }
+    const filterObject = {
+      selectedCategory: this.filter.selectedCategory,
+      selectedPrice: this.filter.selectedPrice,
+      purchaseDateFrom: this.filter.purchaseDateFrom,
+      purchaseDateTo: this.filter.purchaseDateTo,
+      warrantyDateFrom: this.filter.warrantyFrom,
+      warrantyDateTo: this.filter.warrantyTo,
+      searchIdList: this.searchIdList
+    };
 
-  getBillsByPrice(bills: Bill[]): void {
-    this.bills = bills.filter((bill: Bill) =>
-      this.selectedPrice.some(price => price === bill.price.toString())
-    );
-  }
-
-  getBillsByWarranty(bills: Bill[] = this.billsCopy): void {
-    if (this.selectedWarranty === WarrantyOptionsEnum.OVERDUE) {
-      this.bills = bills
-        .sort(
-          (a, b) => +new Date(b.warrantyEndDate) - +new Date(a.warrantyEndDate)
-        )
-        .filter(b => moment(b.warrantyEndDate) < this.today);
-    }
-    if (this.selectedWarranty === WarrantyOptionsEnum.END_IN_ONE_MONTH) {
-      this.bills = bills
-        .sort(
-          (a, b) => +new Date(b.warrantyEndDate) - +new Date(a.warrantyEndDate)
-        )
-        .filter(
-          b =>
-            moment(b.warrantyEndDate) > this.today &&
-            moment(b.warrantyEndDate) < this.todayPlusOneMonth
-        );
-    }
-    if (this.selectedWarranty === WarrantyOptionsEnum.END_IN_ONE_YEAR) {
-      this.bills = bills
-        .sort(
-          (a, b) => +new Date(b.warrantyEndDate) - +new Date(a.warrantyEndDate)
-        )
-        .filter(
-          b =>
-            moment(b.warrantyEndDate) > this.today &&
-            moment(b.warrantyEndDate) < this.todayPlusOneYear
-        );
-    }
-    if (this.selectedWarranty === WarrantyOptionsEnum.RANGE) {
-      this.bills = bills
-        .sort(
-          (a, b) => +new Date(b.warrantyEndDate) - +new Date(a.warrantyEndDate)
-        )
-        .filter(
-          b =>
-            moment(b.warrantyEndDate) > moment(this.fromDate) &&
-            moment(b.warrantyEndDate) < moment(this.toDate)
-        );
-    }
+    this.billService.filterAll(filterObject).subscribe(res => {
+      this.bills = res;
+    });
+    this.filter.resultCount = this.bills.length;
   }
 
   removeFilter(tag: string, type: string): void {
     if (type === 'category') {
-      const index = this.selectedCategory.indexOf(tag);
+      const index = this.filter.selectedCategory.indexOf(tag);
       if (index >= 0) {
-        this.selectedCategory.splice(index, 1);
-        this.billService.selectedCategory.next(this.selectedCategory);
+        this.filter.selectedCategory.splice(index, 1);
+        this.billService.filter.next(this.filter);
         this.getByFilter();
       }
     }
     if (type === 'price') {
-      const index = this.selectedPrice.indexOf(tag);
+      const index = this.filter.selectedPrice.indexOf(tag);
       if (index >= 0) {
-        this.selectedPrice.splice(index, 1);
-        this.billService.selectedPrice.next(this.selectedPrice);
+        this.filter.selectedPrice.splice(index, 1);
+        this.billService.filter.next(this.filter);
 
         this.getByFilter();
       }
     }
     if (type === 'warranty') {
-      this.selectedWarranty = null;
-      this.billService.selectedWarranty.next(this.selectedWarranty);
+      this.filter.selectedWarranty = null;
+      this.billService.filter.next(this.filter);
       this.getByFilter();
     }
   }
 
-  getSelectedValue(): void {
-    const idList = this.searchOptions.reduce(
-      (arr, option) => option.idList,
-      []
-    );
-    this.searchFilterBills = this.billsCopy.filter(bill =>
-      idList.some(id => id === bill._id)
-    );
-    this.getByFilter();
-  }
-
   clearSearchInput(): void {
     this.searchOptions = [];
-    this.searchFilterBills = [...this.billsCopy];
     this.getByFilter();
   }
 

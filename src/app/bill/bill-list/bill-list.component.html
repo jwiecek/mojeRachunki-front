@@ -19,7 +19,7 @@
           <!--<mat-icon class="search" matPrefix>search</mat-icon>-->
           <mat-label></mat-label>
           <input autofocus type="text" #searchRef aria-label="search" matInput formControlName="search" [matAutocomplete]="auto" [(ngModel)]="value" >
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getSelectedValue($event.option.value)">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="getByFilter()">
               <mat-option *ngFor="let option of searchOptions" [value]="option._id">
                 {{option._id}} ({{option.idList.length}})
               </mat-option>
@@ -53,31 +53,31 @@
         <div *ngIf="bills.length; else noItem" class="main-list-block" [@listAnimation]="billsLength" >
           <div #target></div>
           <div>
-            <mat-chip-list *ngIf="selectedCategory.length" aria-label="category tags" class="my-chip-list">
+            <mat-chip-list *ngIf="filter.selectedCategory.length" aria-label="category tags" class="my-chip-list">
               <div class="search-tags-box">
                 <span>Kategoria:</span>
-                <mat-chip *ngFor="let category of selectedCategory"
+                <mat-chip *ngFor="let category of filter.selectedCategory"
                           [removable]="removable" (removed)="removeFilter(category,'category')">
                   {{category}}
                   <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
               </div>
             </mat-chip-list>
-            <mat-chip-list *ngIf="selectedPrice.length" aria-label="price tags" class="my-chip-list">
+            <mat-chip-list *ngIf="filter.selectedPrice.length" aria-label="price tags" class="my-chip-list">
               <div class="search-tags-box">
                 <span>Cena:</span>
-                <mat-chip *ngFor="let price of selectedPrice"
+                <mat-chip *ngFor="let price of filter.selectedPrice"
                           [removable]="removable" (removed)="removeFilter(price,'price')">
                   {{price}}
                   <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
               </div>
             </mat-chip-list>
-            <mat-chip-list *ngIf="selectedWarranty" aria-label="price tags" class="my-chip-list">
+            <mat-chip-list *ngIf="filter.selectedWarranty" aria-label="price tags" class="my-chip-list">
               <div class="search-tags-box">
                 <span>Pozostało gwarancji:</span>
-                <mat-chip [removable]="removable" (removed)="removeFilter(selectedWarranty,'warranty')">
-                  {{selectedWarranty}}
+                <mat-chip [removable]="removable" (removed)="removeFilter(filter.selectedWarranty,'warranty')">
+                  {{filter.selectedWarranty}}
                   <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
               </div>
@@ -94,7 +94,7 @@
                 <p><mat-icon>payment</mat-icon>{{bill.price}}</p>
                 <p *ngIf="elementsView.shop"><mat-icon>home</mat-icon>{{bill.shop}}</p>
                 <p *ngIf="elementsView.description"><mat-icon>description</mat-icon>{{bill.description}}</p>
-                <p *ngIf="elementsView.warrantyEndDate || selectedWarranty"
+                <p *ngIf="elementsView.warrantyEndDate || filter.selectedWarranty"
                    [ngStyle]="{'color':checkIfWarrantyOneMonth(bill) ? '#ff8a80' : 'none'}">
                   <mat-icon>restore</mat-icon>do {{bill.warrantyEndDate | date: 'dd.MM.yyyy'}}</p>
                 <p *ngIf="elementsView.purchaseType"><mat-icon>category</mat-icon>{{bill.purchaseType}}</p>

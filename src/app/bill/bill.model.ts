@@ -19,4 +19,5 @@ export interface Bill {
   warrantyEndDate?: string;
   createdById: string;
   updatedById?: string;
+  selected?: boolean;
 }

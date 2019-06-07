@@ -1,25 +1,26 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Tag } from "./tag.model";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Tag } from './tag.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class TagService {
-  API_URL = "http://localhost:3000";
+  API_URL = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  getTags() {
-    return this.http.get(`${this.API_URL}/tags/userTags`);
+  getTags(): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.API_URL}/tags/userTags`);
   }
-  getBasicTags() {
-    return this.http.get(`${this.API_URL}/tags/basic`);
+  getBasicTags(): Observable<Tag[]> {
+    return this.http.get<Tag[]>(`${this.API_URL}/tags/basic`);
   }
-  addTag(tag: Tag) {
-    return this.http.post(`${this.API_URL}/tags/create`, tag);
+  addTag(tag: Tag): Observable<Tag> {
+    return this.http.post<Tag>(`${this.API_URL}/tags/create`, tag);
   }
-  removeTag(id: string) {
-    return this.http.delete(`${this.API_URL}/tags/delete/${id}`);
+  removeTag(id: string): Observable<Tag> {
+    return this.http.delete<Tag>(`${this.API_URL}/tags/delete/${id}`);
   }
 }

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Bill } from './bill.model';
+import { FilterInterface } from '../_interfaces/filter.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -17,23 +18,18 @@ export class BillService {
     { description: false },
     { warrantyEndDate: false }
   ]);
-  // public filtersChanged = new BehaviorSubject<FilterInterface>({
-  //   selectedCategory: [],
-  //   selectedPrice: [],
-  //   selectedWarrantyOption: WarrantyOptionsEnum.RANGE,
-  //   selectedWarrantyFrom: null,
-  //   selectedWarrantyTo: null,
-  //   resultCount: null
-  // });
 
-  // public selectedWarranty = new BehaviorSubject<any>(null);
-
-  public selectedWarranty = new BehaviorSubject<string>(null);
-  public selectedCategory = new BehaviorSubject<Array<string>>([]);
-  public selectedPrice = new BehaviorSubject<object>([]);
-  public resultCount = new BehaviorSubject<number>(0);
-  public warrantyFrom = new BehaviorSubject<any>(null);
-  public warrantyTo = new BehaviorSubject<any>(null);
+  public filter = new BehaviorSubject<FilterInterface>({
+    warrantyFrom: null,
+    warrantyTo: null,
+    selectedWarranty: '',
+    resultCount: 0,
+    selectedCategory: [],
+    selectedPrice: [],
+    purchaseDateFrom: null,
+    purchaseDateTo: null
+  });
+  public currentFilter = this.filter.asObservable();
 
   constructor(private http: HttpClient) {
     this.loggedUserId = BillService.getLoggedUserId();
@@ -42,32 +38,36 @@ export class BillService {
   static getLoggedUserId(): number {
     return JSON.parse(localStorage.getItem('currentUser')).userId;
   }
-  getBills() {
+  getBills(): Observable<Bill[]> {
     // return this.http.get(`${this.API_URL}/bills/all`).pipe(tap(bill => new Bill(bill)));
-    return this.http.get(`${this.API_URL}/bills/allUserBills`);
+    return this.http.get<Bill[]>(`${this.API_URL}/bills/allUserBills`);
   }
 
-  createBill(bill: Bill) {
+  createBill(bill: Bill): Observable<Bill> {
     const newBill = bill;
     newBill.createdById = this.loggedUserId;
-    return this.http.post(`${this.API_URL}/bills/create`, newBill);
+    return this.http.post<Bill>(`${this.API_URL}/bills/create`, newBill);
   }
 
-  updateBill(bill: Bill, id: string) {
+  updateBill(bill: Bill, id: string): Observable<Bill> {
     bill.updatedById = this.loggedUserId;
-    return this.http.put(`${this.API_URL}/bills/update?id=${id}`, bill);
+    return this.http.put<Bill>(`${this.API_URL}/bills/update?id=${id}`, bill);
   }
 
-  getBillById(id: string) {
-    return this.http.get(`${this.API_URL}/bills/find/${id}`);
+  getBillById(id: string): Observable<Bill> {
+    return this.http.get<Bill>(`${this.API_URL}/bills/find/${id}`);
   }
 
-  filterBill(search: string) {
-    return this.http.get(`${this.API_URL}/bills/filter/${search}`);
+  filterBill(search: string): Observable<Array<string>> {
+    return this.http.get<Array<string>>(`${this.API_URL}/bills/filter/${search}`);
   }
 
-  removeBill(id: string) {
-    return this.http.delete(`${this.API_URL}/bills/delete/${id}`);
+  filterAll(filterObject): Observable<Bill[]> {
+    return this.http.post<Bill[]>(`${this.API_URL}/bills/filterAll`, filterObject);
+  }
+
+  removeBill(id: string): Observable<Bill> {
+    return this.http.delete<Bill>(`${this.API_URL}/bills/delete/${id}`);
   }
 
   uploadPhoto(fileToUpload) {
