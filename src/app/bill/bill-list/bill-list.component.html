@@ -67,7 +67,7 @@
               <div class="search-tags-box">
                 <span>Cena:</span>
                 <mat-chip [removable]="removable" (removed)="removeFilter(filter, 'price')" class="price-span">
-                  <span *ngIf="filter.selectedPriceFrom">od {{filter.selectedPriceFrom}}</span><span *ngIf="filter.selectedPriceTo">do {{filter.selectedPriceTo}} </span><span>zł</span>
+                  <span *ngIf="filter.selectedPriceFrom">od {{filter.selectedPriceFrom}}</span><span *ngIf="filter.selectedPriceTo">do {{filter.selectedPriceTo}}</span><span>zł</span>
                   <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
               </div>
@@ -77,6 +77,15 @@
                 <span>Pozostało gwarancji:</span>
                 <mat-chip [removable]="removable" (removed)="removeFilter(filter.selectedWarranty,'warranty')">
                   {{filter.selectedWarranty}}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+              </div>
+            </mat-chip-list>
+            <mat-chip-list *ngIf="filter.purchaseDateFrom || filter.purchaseDateTo" aria-label="purchase date tags" class="my-chip-list">
+              <div class="search-tags-box">
+                <span>Data zakupu:</span>
+                <mat-chip [removable]="removable" (removed)="removeFilter(filter, 'purchaseDate')" class="price-span">
+                  <span *ngIf="filter.purchaseDateFrom">od {{filter.purchaseDateFrom | date: 'dd.mm.yyyy'}}</span><span *ngIf="filter.purchaseDateTo">do {{filter.purchaseDateTo | date: 'dd.mm.yyyy'}}</span><span>zł</span>
                   <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
               </div>

@@ -231,20 +231,23 @@ export class BillListComponent implements OnInit, OnDestroy {
       if (index >= 0) {
         this.filter.selectedCategory.splice(index, 1);
         this.billService.filter.next(this.filter);
-        this.getByFilter();
       }
     }
     if (type === 'price') {
       this.filter.selectedPriceFrom = null;
       this.filter.selectedPriceTo = null;
       this.billService.filter.next(this.filter);
-      this.getByFilter();
+    }
+    if (type === 'purchaseDate') {
+      this.filter.purchaseDateFrom = null;
+      this.filter.purchaseDateTo = null;
+      this.billService.filter.next(this.filter);
     }
     if (type === 'warranty') {
       this.filter.selectedWarranty = null;
       this.billService.filter.next(this.filter);
-      this.getByFilter();
     }
+    this.getByFilter();
   }
 
   clearSearchInput(): void {
