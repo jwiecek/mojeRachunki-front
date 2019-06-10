@@ -2,7 +2,7 @@ export interface Bill {
   _id: string;
   imageBillPath?: string;
   imageProductPath?: string;
-  price: string;
+  price: number;
   purchaseDate: string;
   purchaseType: string[];
   shop: string;

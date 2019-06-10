@@ -35,6 +35,10 @@
     }
   }
 
+  mat-chip.price-span span{
+    color: #000 !important;
+  }
+
   .main-list-block{
     height: calc(100vh - 150px);
     overflow: auto;

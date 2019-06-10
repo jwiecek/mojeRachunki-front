@@ -36,7 +36,7 @@ export class BillCreateComponent implements OnInit {
   selectedProducts = [];
   selectedShops = [];
   selectedBrands = [];
-  selectedPrice = [];
+  selectedPrice = null;
   selectedWarrantyValue = 0;
   selectedWarrantyMonth: number;
   counter: number;
@@ -270,7 +270,7 @@ export class BillCreateComponent implements OnInit {
 
   filterSelectedTags() {
     this.selectedPurchaseTypes = this.tagsPurchaseType.filter(t => t.selected === true).map(t => t.label);
-    this.selectedPrice = this.tagsPrice.filter(t => t.selected === true).map(t => t.label);
+    this.selectedPrice = this.billForm.get('price').value;
     this.selectedProducts = this.tagsProduct.filter(t => t.selected === true).map(t => t.label);
     this.selectedBrands = this.tagsBrand.filter(t => t.selected === true).map(t => t.label);
     this.selectedShops = this.tagsShop.filter(t => t.selected === true).map(t => t.label);
@@ -278,7 +278,7 @@ export class BillCreateComponent implements OnInit {
 
   getTagsByType(): void {
     this.tagsPurchaseType = this.tags.filter(tag => tag.type === 'purchaseType');
-    this.tagsPrice = this.tags.filter(tag => tag.type === 'price');
+    // this.tagsPrice = this.tags.filter(tag => tag.type === 'price');
     this.tagsWarranty = this.tags.filter(tag => tag.type === 'warranty');
 
     if (this.selectedPurchaseTypes) {

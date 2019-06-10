@@ -63,12 +63,11 @@
                 </mat-chip>
               </div>
             </mat-chip-list>
-            <mat-chip-list *ngIf="filter.selectedPrice.length" aria-label="price tags" class="my-chip-list">
+            <mat-chip-list *ngIf="filter.selectedPriceFrom || filter.selectedPriceTo" aria-label="price tags" class="my-chip-list">
               <div class="search-tags-box">
                 <span>Cena:</span>
-                <mat-chip *ngFor="let price of filter.selectedPrice"
-                          [removable]="removable" (removed)="removeFilter(price,'price')">
-                  {{price}}
+                <mat-chip [removable]="removable" (removed)="removeFilter(filter, 'price')" class="price-span">
+                  <span *ngIf="filter.selectedPriceFrom">od {{filter.selectedPriceFrom}}</span><span *ngIf="filter.selectedPriceTo">do {{filter.selectedPriceTo}} </span><span>zł</span>
                   <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
               </div>

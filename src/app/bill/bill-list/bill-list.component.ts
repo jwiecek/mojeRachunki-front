@@ -58,7 +58,7 @@ export class BillListComponent implements OnInit, OnDestroy {
   private todayPlusOneYear;
   value;
   public innerWidth: any;
-  isMobile: boolean;
+  public isMobile: boolean;
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
   private searchIdList = [];
@@ -178,7 +178,8 @@ export class BillListComponent implements OnInit, OnDestroy {
 
   cleanSelected(): void {
     this.filter.selectedWarranty = null;
-    this.filter.selectedPrice = [];
+    this.filter.selectedPriceFrom = null;
+    this.filter.selectedPriceTo = null;
     this.filter.selectedCategory = [];
     this.billService.filter.next(this.filter);
   }
@@ -191,7 +192,8 @@ export class BillListComponent implements OnInit, OnDestroy {
     this.getBillsByWarranty();
     const filterObject = {
       selectedCategory: this.filter.selectedCategory,
-      selectedPrice: this.filter.selectedPrice,
+      selectedPriceFrom: this.filter.selectedPriceFrom,
+      selectedPriceTo: this.filter.selectedPriceTo,
       purchaseDateFrom: this.filter.purchaseDateFrom,
       purchaseDateTo: this.filter.purchaseDateTo,
       warrantyDateFrom: this.filter.warrantyFrom,
@@ -233,13 +235,10 @@ export class BillListComponent implements OnInit, OnDestroy {
       }
     }
     if (type === 'price') {
-      const index = this.filter.selectedPrice.indexOf(tag);
-      if (index >= 0) {
-        this.filter.selectedPrice.splice(index, 1);
-        this.billService.filter.next(this.filter);
-
-        this.getByFilter();
-      }
+      this.filter.selectedPriceFrom = null;
+      this.filter.selectedPriceTo = null;
+      this.billService.filter.next(this.filter);
+      this.getByFilter();
     }
     if (type === 'warranty') {
       this.filter.selectedWarranty = null;

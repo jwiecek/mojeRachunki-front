@@ -47,7 +47,7 @@
 
   <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" [hidden]="counter !== 2 && isMobile && mode === 'create'">
 
-    <h2>Lata gwarancji</h2>
+    <h2>Okres gwarancji</h2>
     <p>{{selectedWarrantyLabel}} {{time}}</p>
     <div>
       <!--[displayWith]="test.bind(this)"-->
@@ -66,17 +66,20 @@
     <h2>Kwota</h2>
     <div>
       <mat-form-field>
-        <mat-chip-list #priceList [multiple]="true">
-          <mat-chip *ngFor="let tag of tagsPrice" [selectable]="selectable" [selected]="tag.selected"
-                    (click)="selectTag(tag, false); next()" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
-            {{tag.label}}
-          </mat-chip>
-          <input
-            [matChipInputFor]="priceList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            [matChipInputAddOnBlur]="addOnBlur"
-            (matChipInputTokenEnd)="addTag($event, 'price', false)">
-        </mat-chip-list>
+        <!--<mat-chip-list #priceList [multiple]="true">-->
+          <!--<mat-chip *ngFor="let tag of tagsPrice" [selectable]="selectable" [selected]="tag.selected"-->
+                    <!--(click)="selectTag(tag, false); next()" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">-->
+            <!--{{tag.label}}-->
+          <!--</mat-chip>-->
+          <!--<input-->
+            <!--[matChipInputFor]="priceList"-->
+            <!--[matChipInputSeparatorKeyCodes]="separatorKeysCodes"-->
+            <!--[matChipInputAddOnBlur]="addOnBlur"-->
+            <!--(matChipInputTokenEnd)="addTag($event, 'price', false)">-->
+        <!--</mat-chip-list>-->
+        <input matInput placeholder="wpisz kwotę" formControlName="price">
+        <span matSuffix>zł</span>
+
       </mat-form-field>
     </div>
   </div>
@@ -191,7 +194,10 @@
             (click)="previous()"><mat-icon>chevron_left</mat-icon>Wstecz</button>
     <div fxFlex></div>
     <div style="color:red; margin-left:20px">{{alert}}</div>
-    <button *ngIf="((mode ==='edit' && (counter < 9)) || canNext[counter] && (counter < 9)) && isMobile && mode === 'create' " type="button"
+    <button *ngIf="((mode ==='edit' && (counter < 9)) ||
+    canNext[counter] && (counter < 9)) && isMobile && mode === 'create' ||
+    (counter === 3 && this.billForm.get('price').valid === true)"
+            type="button"
             mat-stroked-button color="primary" (click)="next()">Dalej<mat-icon>chevron_right</mat-icon></button>
     <button *ngIf="counter === 9 || mode === 'edit' || !isMobile" type="submit" mat-flat-button color="primary"><span *ngIf="mode !== 'edit'"> Zapisz</span><span *ngIf="mode === 'edit'"> Zaktualizuj</span> <span> paragon</span></button>
   </div>

@@ -3,7 +3,8 @@ import * as moment from 'moment';
 export interface FilterInterface {
   selectedWarranty: string;
   selectedCategory: string[];
-  selectedPrice: string[];
+  selectedPriceFrom: number;
+  selectedPriceTo: number;
   resultCount: number;
   warrantyFrom: moment.Moment;
   warrantyTo: moment.Moment;

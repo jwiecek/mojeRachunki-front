@@ -16,7 +16,6 @@ import { FilterInterface } from '../../../_interfaces/filter.interface';
 })
 export class FilterDialogComponent implements OnInit, OnDestroy {
   private categoryList: Tag[];
-  private priceList: Tag[];
   private subscriptions: Subscription = new Subscription();
   private dateForm: FormGroup;
   private warrantyForm: FormGroup;
@@ -33,8 +32,8 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.onResize();
     this.dateForm = new FormGroup({
-      from: new FormControl(),
-      to: new FormControl()
+      fromDate: new FormControl(),
+      toDate: new FormControl()
     });
     this.warrantyForm = new FormGroup({
       fromWarranty: new FormControl(),
@@ -72,14 +71,10 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   getList(): void {
     this.tagService.getTags().subscribe((tags: Tag[]) => {
       this.categoryList = tags.filter((tag: Tag) => tag.type === 'purchaseType');
-      this.priceList = tags.filter((tag: Tag) => tag.type === 'price');
       this.categoryList.map(tag => {
         this.filter.selectedCategory.some(label => label === tag.label)
           ? (tag.selected = true)
           : (tag.selected = false);
-      });
-      this.priceList.map(tag => {
-        this.filter.selectedPrice.some(label => label === tag.label) ? (tag.selected = true) : (tag.selected = false);
       });
     });
   }
@@ -92,7 +87,7 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   }
 
   setPrice(): void {
-    this.filter.selectedPrice = this.priceList.filter(label => label.selected === true).map(price => price.label);
+    console.log(this.filter);
     this.billService.filter.next(this.filter);
   }
 
@@ -105,13 +100,15 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
     this.billService.filter.next(this.filter);
   }
 
-  setWarrantyRange(date, type) {
-    if (type === 'from') {
-      this.filter.warrantyFrom = date;
-    } else if (type === 'to') {
-      console.log(date);
-
-      this.filter.warrantyTo = date;
+  setRange(type) {
+    if (type === 'fromWarranty') {
+      this.filter.warrantyFrom = this.warrantyForm.get('fromWarranty').value;
+    } else if (type === 'toWarranty') {
+      this.filter.warrantyTo = this.warrantyForm.get('toWarranty').value;
+    } else if (type === 'fromDate') {
+      this.filter.purchaseDateFrom = this.dateForm.get('fromDate').value;
+    } else if (type === 'toDate') {
+      this.filter.purchaseDateTo = this.dateForm.get('toDate').value;
     }
     this.billService.filter.next(this.filter);
   }
