@@ -188,7 +188,7 @@ export class BillListComponent implements OnInit, OnDestroy {
     if (this.searchOptions) {
       this.searchIdList = this.searchOptions.reduce((arr, option) => option.idList, []);
     }
-
+    this.getBillsByWarranty();
     const filterObject = {
       selectedCategory: this.filter.selectedCategory,
       selectedPrice: this.filter.selectedPrice,
@@ -203,6 +203,24 @@ export class BillListComponent implements OnInit, OnDestroy {
       this.bills = res;
     });
     this.filter.resultCount = this.bills.length;
+  }
+
+  getBillsByWarranty(): void {
+    if (this.filter.selectedWarranty === WarrantyOptionsEnum.OVERDUE) {
+      this.filter.warrantyTo = this.today;
+    }
+    if (this.filter.selectedWarranty === WarrantyOptionsEnum.END_IN_ONE_MONTH) {
+      this.filter.warrantyFrom = this.today;
+      this.filter.warrantyTo = this.todayPlusOneMonth;
+    }
+    if (this.filter.selectedWarranty === WarrantyOptionsEnum.END_IN_ONE_YEAR) {
+      this.filter.warrantyFrom = this.today;
+      this.filter.warrantyTo = this.todayPlusOneYear;
+    }
+    if (this.filter.selectedWarranty === WarrantyOptionsEnum.RANGE) {
+      this.filter.warrantyFrom = moment(this.filter.warrantyFrom);
+      this.filter.warrantyTo = moment(this.filter.warrantyTo);
+    }
   }
 
   removeFilter(tag: string, type: string): void {

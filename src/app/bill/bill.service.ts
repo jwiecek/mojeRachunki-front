@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Bill } from './bill.model';
 import { FilterInterface } from '../_interfaces/filter.interface';
+import { WarrantyOptionsEnum } from '../_enums/warranty-option.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class BillService {
   public filter = new BehaviorSubject<FilterInterface>({
     warrantyFrom: null,
     warrantyTo: null,
-    selectedWarranty: '',
+    selectedWarranty: WarrantyOptionsEnum.NONE,
     resultCount: 0,
     selectedCategory: [],
     selectedPrice: [],

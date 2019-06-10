@@ -87,7 +87,10 @@ export class BillCreateComponent implements OnInit {
       } else {
         this.mode = 'create';
         this.headerName = 'Dodawanie';
-        this.getTags();
+        this.tagService.getTags().subscribe((tags: Tag[]) => {
+          this.tags = tags;
+          this.getTags();
+        });
       }
     });
     this.billForm = new FormGroup({

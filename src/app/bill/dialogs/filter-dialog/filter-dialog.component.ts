@@ -97,26 +97,23 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   }
 
   setWarrantyOption(option: string): void {
-    if (option === WarrantyOptionsEnum.RANGE) {
-      console.log('zakres');
+    if (option !== WarrantyOptionsEnum.RANGE) {
+      this.filter.warrantyFrom = null;
+      this.filter.warrantyTo = null;
     }
     this.filter.selectedWarranty = option;
     this.billService.filter.next(this.filter);
   }
 
   setWarrantyRange(date, type) {
-    // if (type === 'from') {
-    //   this.filterwarrantyFromDate = date;
-    //   console.log(date);
-    //   this.filter.warrantyFrom = this.warrantyFromDate;
-    //   this.billService.warrantyFrom.next(this.warrantyFromDate);
-    // } else if (type === 'to') {
-    //   console.log(date);
-    //
-    //   this.warrantyToDate = date;
-    //   this.billService.warrantyTo.next(this.warrantyToDate);
-    // }
-    // console.log('zmiana zakresu');
+    if (type === 'from') {
+      this.filter.warrantyFrom = date;
+    } else if (type === 'to') {
+      console.log(date);
+
+      this.filter.warrantyTo = date;
+    }
+    this.billService.filter.next(this.filter);
   }
 
   cancel(): void {
