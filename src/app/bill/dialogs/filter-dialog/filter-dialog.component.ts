@@ -80,6 +80,7 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   }
 
   setCategory(): void {
+    console.log('set');
     this.filter.selectedCategory = this.categoryList
       .filter(label => label.selected === true)
       .map(category => category.label);
@@ -111,11 +112,6 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
       this.filter.purchaseDateTo = this.dateForm.get('toDate').value;
     }
     this.billService.filter.next(this.filter);
-  }
-
-  cancel(): void {
-    // this.selectedWarranty = null;
-    // this.billService.selectedWarranty.next(this.selectedWarranty);
   }
 
   ngOnDestroy() {

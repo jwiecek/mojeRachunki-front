@@ -102,7 +102,6 @@ export class BillListComponent implements OnInit, OnDestroy {
           bill.warrantyEndDate = new Date(bill.warrantyEndDate).toLocaleString('en-US');
           bill.expand = false;
         });
-        this.bills.sort((a, b) => +new Date(b.purchaseDate) - +new Date(a.purchaseDate));
         this.getBillsOneMonthWarranty();
       },
       error => console.warn('err: ' + error)
@@ -155,8 +154,10 @@ export class BillListComponent implements OnInit, OnDestroy {
 
     this.billService.filterAll(filterObject).subscribe(res => {
       this.bills = res;
+      this.bills.sort((a, b) => +new Date(b.purchaseDate) - +new Date(a.purchaseDate));
     });
     this.filter.resultCount = this.bills.length;
+    // this.billService.filter.next(this.filter);
   }
 
   getBillsByWarranty(): void {
@@ -219,8 +220,9 @@ export class BillListComponent implements OnInit, OnDestroy {
   }
 
   showBillPhoto(url): void {
+    const dialogWidth = this.isMobile ? '100vw' : '350px';
     this.dialog.open(BillPhotoDialogComponent, {
-      width: '100vw',
+      width: dialogWidth,
       data: { urlPhoto: url }
     });
   }

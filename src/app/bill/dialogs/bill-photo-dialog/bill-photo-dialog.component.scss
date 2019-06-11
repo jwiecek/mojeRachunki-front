@@ -1,8 +1,16 @@
 img {
-  width: 90vw;
+  width: 300px;
   height: auto;
 }
 
 .mat-icon-button {
   float: right;
 }
+
+@media only screen and (max-width: 600px) {
+  img {
+    width: 90vw;
+    height: auto;
+  }
+}
+

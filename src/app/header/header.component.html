@@ -28,7 +28,7 @@
   </div>
 
   <div *ngIf="isMobile && headerName !== 'Lista'" fxLayout="row">
-    <span><a routerLink="/"><mat-icon class="mat-icon-back">keyboard_arrow_left</mat-icon></a></span>
+    <button mat-button routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></button>
     <h3>{{headerName}}</h3>
   </div>
 

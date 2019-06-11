@@ -1,4 +1,6 @@
-<main>
+<main style="overflow: hidden">
   <app-header></app-header>
-  <router-outlet></router-outlet>
+  <div style="overflow: auto; height: calc(100vh - 50px)">
+    <router-outlet></router-outlet>
+  </div>
 </main>

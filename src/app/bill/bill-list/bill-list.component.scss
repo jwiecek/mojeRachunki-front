@@ -41,9 +41,12 @@
 
   .main-list-block{
     height: calc(100vh - 150px);
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+    //overflow: auto;
 
+    .filter-list-block{
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
     mat-card {
       margin: 6px 0;
       font-family: 'Open Sans', sans-serif;

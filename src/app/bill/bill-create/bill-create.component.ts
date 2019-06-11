@@ -73,7 +73,7 @@ export class BillCreateComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params.billId) {
         this.mode = 'edit';
-        this.headerName = 'Edycja';
+        this.headerName = 'Edytuj rachunek';
         this.billId = params.billId;
         const getTags = this.tagService.getTags();
         const getSelectedBill = this.billService.getBillById(this.billId);
@@ -84,7 +84,7 @@ export class BillCreateComponent implements OnInit {
         });
       } else {
         this.mode = 'create';
-        this.headerName = 'Dodawanie';
+        this.headerName = 'Dodaj rachunek';
         this.tagService.getTags().subscribe((tags: Tag[]) => {
           this.tags = tags;
           this.getTags();

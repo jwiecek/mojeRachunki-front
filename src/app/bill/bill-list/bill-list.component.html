@@ -5,7 +5,7 @@
       <app-change-view-dialog></app-change-view-dialog>
     </div>
     <div fxFlex class="main-view-container" fxLayout="column" fxLayoutAlign="space-between stretch">
-      <div fxLayout="column">
+      <div fxLayout="column" style="overflow: auto;">
         <ng-template #noItem>
           <div class="no-result-box">
             brak rachunków
@@ -20,7 +20,7 @@
         </div>
         <div class="main-list-block" [@listAnimation]="billsLength">
           <div #target></div>
-          <div fxLayout="row">
+          <div fxLayout="row" class="filter-list-block">
             <mat-chip-list *ngIf="filter.selectedCategory.length" aria-label="category tags" class="my-chip-list">
               <div class="search-tags-box">
                 <span>Kategoria:</span>

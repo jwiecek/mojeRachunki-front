@@ -1,10 +1,6 @@
-<!--<mat-toolbar color="primary">-->
-  <!--<span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>-->
-  <!--<h3>{{headerName}} rachunku</h3>-->
-<!--</mat-toolbar>-->
+<h2 class='header' *ngIf="!isMobile">{{headerName}}</h2>
 
 <form [formGroup]="billForm" novalidate (submit)="onSaveBill()">
-  <h2 *ngIf="!isMobile">Edycja rachunku</h2>
   <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 0 || !isMobile || mode === 'edit'">
     <h2>Wybierz zdjęcie </h2>
     <h2>1</h2>
@@ -18,22 +14,12 @@
     <div *ngIf="imagePreview !== '' && imagePreview && billForm.get('imageBillPath').valid">
       <img [src]="imagePreview" [alt]="billForm.value.product">
     </div>
-    <!--<div>-->
-      <!--<h2>2</h2><span> (niewymagane)</span>-->
-    <!--</div>-->
-    <!--<div>-->
-      <!--<button mat-stroked-button type="button" (click)="filePicker.click()">wybierz zdjęcie produktu</button>-->
-      <!--&lt;!&ndash;<input type="file" #filePicker (change)="onImagePicked($event)">&ndash;&gt;-->
-    <!--</div>-->
-    <!--<div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">-->
-      <!--<img [src]="imagePreview" [alt]="billForm.value.title">-->
-    <!--</div>-->
   </div>
 
   <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" [hidden]="counter !== 1 && isMobile && mode === 'create'">
     <h2>Data zakupu</h2>
     <div>
-      <mat-form-field class="example-full-width">
+      <mat-form-field class="short-input">
         <input matInput [max]="maxDate"
                [matDatepicker]="picker"
                placeholder="Data zakupu"
@@ -65,18 +51,7 @@
   <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 3 || !isMobile || mode === 'edit'">
     <h2>Kwota</h2>
     <div>
-      <mat-form-field>
-        <!--<mat-chip-list #priceList [multiple]="true">-->
-          <!--<mat-chip *ngFor="let tag of tagsPrice" [selectable]="selectable" [selected]="tag.selected"-->
-                    <!--(click)="selectTag(tag, false); next()" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">-->
-            <!--{{tag.label}}-->
-          <!--</mat-chip>-->
-          <!--<input-->
-            <!--[matChipInputFor]="priceList"-->
-            <!--[matChipInputSeparatorKeyCodes]="separatorKeysCodes"-->
-            <!--[matChipInputAddOnBlur]="addOnBlur"-->
-            <!--(matChipInputTokenEnd)="addTag($event, 'price', false)">-->
-        <!--</mat-chip-list>-->
+      <mat-form-field class="short-input">
         <input matInput placeholder="wpisz kwotę" formControlName="price">
         <span matSuffix>zł</span>
 
@@ -84,13 +59,15 @@
     </div>
   </div>
 
-  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 4 || !isMobile || mode === 'edit'">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}"
+       *ngIf="counter === 4 || !isMobile || mode === 'edit'">
     <h2>Kategoria produktu</h2>
     <div>
       <mat-form-field>
         <mat-chip-list #purchaseTypeList [multiple]="true" formControlName="purchaseType">
           <mat-chip *ngFor="let tag of tagsPurchaseType"
-                    (click)="selectTag(tag, false); next()" [selectable]="selectable" [selected]="tag.selected" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
+                    (click)="selectTag(tag, false); next()" [selectable]="selectable" [selected]="tag.selected"
+                    [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
             {{tag.label}}
           </mat-chip>
           <input
@@ -103,7 +80,8 @@
     </div>
   </div>
 
-  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 5 || !isMobile || mode === 'edit'">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}"
+       *ngIf="billForm.get('purchaseType').value && (counter === 5 || !isMobile || mode === 'edit')">
     <h2>Produkt</h2>
     <span>(możesz wybrać kilka)</span>
     <div>
@@ -124,7 +102,8 @@
   </div>
 
 
-  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 6 || !isMobile || mode === 'edit'">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}"
+       *ngIf="billForm.get('purchaseType').value && (counter === 6 || !isMobile || mode === 'edit')">
     <h2>Marka</h2>
     <span>(możesz wybrać kilka / niewymagane)</span>
     <div>
@@ -144,14 +123,16 @@
     </div>
   </div>
 
-  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 7 || !isMobile || mode === 'edit'">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}"
+       *ngIf="billForm.get('purchaseType').value && (counter === 7 || !isMobile || mode === 'edit')">
     <h2>Sklep</h2>
     <span>(niewymagane)</span>
     <div>
       <mat-form-field>
         <mat-chip-list #shopList [multiple]="true" formControlName="shop">
           <mat-chip *ngFor="let tag of tagsShop"
-                    (click)="selectTag(tag, false); next()" [selectable]="selectable" [selected]="tag.selected" [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
+                    (click)="selectTag(tag, false); next()" [selectable]="selectable" [selected]="tag.selected"
+                    [ngClass]="{'selected-tag': tag.selected, '': tag.selected}">
             {{tag.label}}
           </mat-chip>
           <input
@@ -164,7 +145,8 @@
     </div>
   </div>
 
-  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}" *ngIf="counter === 8 || !isMobile || mode === 'edit'">
+  <div [ngClass]="{'block-form-mobile': isMobile && mode ==='create', 'block-form': !isMobile || mode === 'edit'}"
+       *ngIf="counter === 8 || !isMobile || mode === 'edit'">
     <h2>Opis</h2>
     <span>(niewymagane)</span>
     <div>
@@ -199,7 +181,11 @@
     (counter === 3 && this.billForm.get('price').valid === true)"
             type="button"
             mat-stroked-button color="primary" (click)="next()">Dalej<mat-icon>chevron_right</mat-icon></button>
-    <button *ngIf="counter === 9 || mode === 'edit' || !isMobile" type="submit" mat-flat-button color="primary"><span *ngIf="mode !== 'edit'"> Zapisz</span><span *ngIf="mode === 'edit'"> Zaktualizuj</span> <span> paragon</span></button>
+    <button *ngIf="counter === 9 || mode === 'edit' || !isMobile" [ngStyle]="{'margin': isMobile ? '0' : '0 20px 80px'}"
+            type="submit" mat-flat-button color="primary">
+      <span *ngIf="mode !== 'edit'"> Zapisz</span>
+      <span *ngIf="mode === 'edit'"> Zaktualizuj</span> <span> paragon</span>
+    </button>
   </div>
 
 </form>
