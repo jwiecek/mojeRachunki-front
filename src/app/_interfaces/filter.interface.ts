@@ -10,4 +10,5 @@ export interface FilterInterface {
   warrantyTo: moment.Moment;
   purchaseDateFrom: moment.Moment;
   purchaseDateTo: moment.Moment;
+  searchIdList?: string[];
 }

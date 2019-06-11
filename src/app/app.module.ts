@@ -36,10 +36,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ChangeViewDialogComponent } from './bill/dialogs/change-view-dialog/change-view-dialog.component';
 import { FilterDialogComponent } from './bill/dialogs/filter-dialog/filter-dialog.component';
-import {
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-  MatMomentDateModule
-} from '@angular/material-moment-adapter';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { BillPhotoDialogComponent } from './bill/dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import pl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
@@ -47,6 +44,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { AuthGuard } from './auth/auth.guard';
+import { HeaderComponent } from './header/header.component';
+import { BillSearchComponent } from './bill/bill-search/bill-search.component';
 registerLocaleData(pl);
 
 @NgModule({
@@ -60,7 +59,9 @@ registerLocaleData(pl);
     FilterDialogComponent,
     BillPhotoDialogComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    HeaderComponent,
+    BillSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -104,10 +105,6 @@ registerLocaleData(pl);
     { provide: MatBottomSheetRef, useValue: {} }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [
-    ChangeViewDialogComponent,
-    FilterDialogComponent,
-    BillPhotoDialogComponent
-  ]
+  entryComponents: [ChangeViewDialogComponent, FilterDialogComponent, BillPhotoDialogComponent]
 })
 export class AppModule {}

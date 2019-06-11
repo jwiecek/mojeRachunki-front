@@ -1,7 +1,7 @@
-<mat-toolbar color="primary">
-  <span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>
-  <h3>{{headerName}} rachunku</h3>
-</mat-toolbar>
+<!--<mat-toolbar color="primary">-->
+  <!--<span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>-->
+  <!--<h3>{{headerName}} rachunku</h3>-->
+<!--</mat-toolbar>-->
 
 <form [formGroup]="billForm" novalidate (submit)="onSaveBill()">
   <h2 *ngIf="!isMobile">Edycja rachunku</h2>

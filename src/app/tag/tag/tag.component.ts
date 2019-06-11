@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { TagService } from "../tag.service";
-import { Tag } from "../tag.model";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material";
-import { AuthService } from "../../auth/auth.service";
+import { Component, HostListener, OnInit } from '@angular/core';
+import { TagService } from '../tag.service';
+import { Tag } from '../tag.model';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
-  selector: "app-tag",
-  templateUrl: "./tag.component.html",
-  styleUrls: ["./tag.component.scss"]
+  selector: 'app-tag',
+  templateUrl: './tag.component.html',
+  styleUrls: ['./tag.component.scss']
 })
 export class TagComponent implements OnInit {
   tags: Tag[] = [];
@@ -23,14 +23,19 @@ export class TagComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  public isMobile: boolean;
 
-  constructor(
-    private tagService: TagService,
-    private authService: AuthService
-  ) {}
+  constructor(private tagService: TagService, private authService: AuthService) {}
 
   ngOnInit() {
     this.getTags();
+    this.onResize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    const innerWidth = window.innerWidth;
+    this.isMobile = innerWidth < 600;
   }
 
   getTags(): void {
@@ -42,27 +47,17 @@ export class TagComponent implements OnInit {
   }
 
   getTagsByType(): void {
-    this.tagsPurchaseType = this.tags.filter(
-      (tag: Tag) => tag.type === "purchaseType"
-    );
-    this.tagsPrice = this.tags.filter((tag: Tag) => tag.type === "price");
+    this.tagsPurchaseType = this.tags.filter((tag: Tag) => tag.type === 'purchaseType');
+    this.tagsPrice = this.tags.filter((tag: Tag) => tag.type === 'price');
     // this.tagsPrice = this.tagsPrice.sort((a, b) => parseFloat(a.label) - parseFloat(b.label));
     this.tagsPrice = this.tagsPrice.sort(
-      (a, b) =>
-        parseFloat(a.label.replace(/\D/g, "")) -
-        parseFloat(b.label.replace(/\D/g, ""))
+      (a, b) => parseFloat(a.label.replace(/\D/g, '')) - parseFloat(b.label.replace(/\D/g, ''))
     );
-    this.tagsWarranty = this.tags.filter((tag: Tag) => tag.type === "warranty");
+    this.tagsWarranty = this.tags.filter((tag: Tag) => tag.type === 'warranty');
     this.tagsPurchaseType.forEach((tag: Tag, index: number) => {
-      this.tagsProduct[index] = this.tags.filter(
-        t => t.type === "product" && t.belongToLabel.toString() === tag.label
-      );
-      this.tagsBrand[index] = this.tags.filter(
-        t => t.type === "brand" && t.belongToLabel.toString() === tag.label
-      );
-      this.tagsShop[index] = this.tags.filter(
-        t => t.type === "shop" && t.belongToLabel.toString() === tag.label
-      );
+      this.tagsProduct[index] = this.tags.filter(t => t.type === 'product' && t.belongToLabel.toString() === tag.label);
+      this.tagsBrand[index] = this.tags.filter(t => t.type === 'brand' && t.belongToLabel.toString() === tag.label);
+      this.tagsShop[index] = this.tags.filter(t => t.type === 'shop' && t.belongToLabel.toString() === tag.label);
     });
   }
 
@@ -70,7 +65,7 @@ export class TagComponent implements OnInit {
     const input = event.input;
     const value = event.value;
 
-    if ((value || "").trim()) {
+    if ((value || '').trim()) {
       const newTag = {
         label: value.trim(),
         type: tagType,
@@ -82,11 +77,11 @@ export class TagComponent implements OnInit {
           this.tags.push(tag);
           this.getTags();
         },
-        error => console.warn("err: " + error)
+        error => console.warn('err: ' + error)
       );
     }
     if (input) {
-      input.value = "";
+      input.value = '';
     }
   }
   removeTag(tag: Tag): void {
@@ -98,12 +93,12 @@ export class TagComponent implements OnInit {
           this.tags.splice(index, 1);
           this.getTags();
         },
-        err => console.error("HTTP Error", err)
+        err => console.error('HTTP Error', err)
       );
     }
   }
 
   scroll(el: HTMLElement): void {
-    el.scrollIntoView({ behavior: "smooth" });
+    el.scrollIntoView({ behavior: 'smooth' });
   }
 }

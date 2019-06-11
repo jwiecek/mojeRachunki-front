@@ -26,9 +26,11 @@ export class BillService {
     selectedWarranty: WarrantyOptionsEnum.NONE,
     resultCount: 0,
     selectedCategory: [],
-    selectedPrice: [],
+    selectedPriceFrom: null,
+    selectedPriceTo: null,
     purchaseDateFrom: null,
-    purchaseDateTo: null
+    purchaseDateTo: null,
+    searchIdList: []
   });
   public currentFilter = this.filter.asObservable();
 
@@ -76,8 +78,4 @@ export class BillService {
     formData.append('images', fileToUpload, fileToUpload.name);
     return this.http.post(`${this.API_URL}/bills/uploadPhoto`, formData);
   }
-
-  // getPhoto(imgPath: string) {
-  //   return this.http.get(`${this.API_URL}/bills/${imgPath}`);
-  // }
 }

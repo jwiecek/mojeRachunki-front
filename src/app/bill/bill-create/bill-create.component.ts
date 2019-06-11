@@ -24,7 +24,6 @@ export class BillCreateComponent implements OnInit {
   tagsProduct: Tag[];
   tagsBrand: Tag[];
   tagsShop: Tag[];
-  tagsPrice: Tag[];
   tagsWarranty: Tag[];
   billForm: FormGroup;
   visible = true;
@@ -57,7 +56,6 @@ export class BillCreateComponent implements OnInit {
   imagePreview;
   selectedBillPhotoUrl;
   isMobile: boolean;
-  allSelectedTags = [];
 
   constructor(
     private http: HttpClient,

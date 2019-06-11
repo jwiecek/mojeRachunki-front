@@ -25,7 +25,10 @@ export class ToolbarComponent {
 
   changeViewByWarranty(): void {
     this.filter.selectedWarranty = WarrantyOptionsEnum.END_IN_ONE_MONTH;
-    this.filter.selectedPrice = [];
+    this.filter.selectedPriceFrom = null;
+    this.filter.selectedPriceTo = null;
+    this.filter.purchaseDateFrom = null;
+    this.filter.purchaseDateTo = null;
     this.filter.selectedCategory = [];
     this.billService.filter.next(this.filter);
     this.onViewByWarranty.emit();

@@ -1,0 +1,35 @@
+<mat-toolbar color="primary" *ngIf="userIsAuthenticated" fxFlex>
+
+  <div *ngIf="!isMobile" fxLayout="row" fxLayoutAlign="space-between center" fxFlex>
+    <div routerLink="/" (click)= refresh(); class="logo">
+      <a><span>po</span>RACHUNKI</a>
+    </div>
+    <div>
+      <button mat-button color="primary" mat-flat-button routerLink="/tags">Moje tagi</button>
+      <button mat-button color="primary" mat-flat-button (click)="onLogout()">Wyloguj</button>
+    </div>
+  </div>
+
+  <div *ngIf="isMobile && headerName === 'Lista'" fxLayout="row" fxLayoutAlign="space-between center" fxFlex>
+     <div *ngIf="!searchIsClicked">
+        <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Kontakt</button>
+          <button mat-menu-item (click)="onLogout()">Wyloguj</button>
+        </mat-menu>
+        <span routerLink="/" class="logo"><a><span>po</span>RACHUNKI</a></span>
+      <div (click)="searchIsClicked = true;"><mat-icon class="search" matSuffix>search</mat-icon></div>
+    </div>
+    <div *ngIf="searchIsClicked" fxLayout="row">
+      <button mat-button (click)="searchIsClicked = false;"><mat-icon>keyboard_arrow_left</mat-icon></button>
+      <app-bill-search (filterBills)="getByFilter()"></app-bill-search>
+    </div>
+
+  </div>
+
+  <div *ngIf="isMobile && headerName !== 'Lista'" fxLayout="row">
+    <span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>
+    <h3>{{headerName}}</h3>
+  </div>
+
+</mat-toolbar>

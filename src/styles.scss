@@ -26,7 +26,6 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 @include angular-material-theme($candy-app-theme);
 
 button {
-  margin-top: 10px !important;
   height: 52px;
   min-width: fit-content;
 }

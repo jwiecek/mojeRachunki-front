@@ -8,12 +8,17 @@ import { RegisterComponent } from './auth/register/register.component';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: BillListComponent, canActivate: [AuthGuard] },
-  { path: 'create', component: BillCreateComponent, canActivate: [AuthGuard] },
-  { path: 'edit/:billId', component: BillCreateComponent, canActivate: [AuthGuard] },
-  { path: 'tags', component: TagComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent }
+  { path: '', component: BillListComponent, canActivate: [AuthGuard], data: { title: 'Lista' } },
+  { path: 'create', component: BillCreateComponent, canActivate: [AuthGuard], data: { title: 'Dodaj rachunek' } },
+  {
+    path: 'edit/:billId',
+    component: BillCreateComponent,
+    canActivate: [AuthGuard],
+    data: { title: 'Edytuj rachunek' }
+  },
+  { path: 'tags', component: TagComponent, canActivate: [AuthGuard], data: { title: 'Edycja tagów' } },
+  { path: 'login', component: LoginComponent, data: { title: 'Logowanie' } },
+  { path: 'register', component: RegisterComponent, data: { title: 'Rejestracja' } }
 ];
 
 @NgModule({

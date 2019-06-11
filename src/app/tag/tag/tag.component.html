@@ -1,7 +1,9 @@
-<mat-toolbar color="primary">
-  <span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>
-  <h3>Edycja tagów</h3>
-</mat-toolbar>
+<!--<mat-toolbar color="primary">-->
+  <!--<span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>-->
+  <!--<h3>Edycja tagów</h3>-->
+<!--</mat-toolbar>-->
+<h2 *ngIf="!isMobile">Edycja tagów</h2>
+
 <div class="block">
   <div #target>
     <h2>Kategoria</h2>

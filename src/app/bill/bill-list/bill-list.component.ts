@@ -1,10 +1,8 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { BillService } from '../bill.service';
 import { TagService } from '../../tag/tag.service';
 import { Bill } from '../bill.model';
-import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
@@ -42,26 +40,19 @@ export class BillListComponent implements OnInit, OnDestroy {
   public tags = [];
   public billsLength: number;
   private billsCopy: Bill[] = [];
-  public searchOptions = [];
-  public searchForm: FormGroup;
-  @ViewChild('searchRef') searchRef: ElementRef;
-  private search: string;
   public elementsView;
   public filter: FilterInterface;
   public billsWarrantyInMonth = 0;
   public selectedCategory: Array<string> = [];
   private subscriptions: Subscription = new Subscription();
-  public searchIsClicked = false;
   public removable = true;
   private today;
   private todayPlusOneMonth;
   private todayPlusOneYear;
-  value;
+  public value;
   public innerWidth: any;
   public isMobile: boolean;
-  userIsAuthenticated = false;
-  private authListenerSubs: Subscription;
-  private searchIdList = [];
+  public userIsAuthenticated = false;
 
   constructor(
     private billService: BillService,
@@ -73,25 +64,14 @@ export class BillListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.onResize();
-
     this.userIsAuthenticated = this.authService.getIsAuth();
-    this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
-      this.userIsAuthenticated = isAuthenticated;
-    });
-
-    this.searchForm = new FormGroup({
-      search: new FormControl()
-    });
+    this.subscriptions.add(
+      this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
+        this.userIsAuthenticated = isAuthenticated;
+      })
+    );
     this.getBills();
     this.getTags();
-    fromEvent(this.searchRef.nativeElement, 'keyup')
-      .pipe(
-        map((evt: any) => evt.target.value),
-        // filter(res => res.length > 1),
-        debounceTime(200),
-        distinctUntilChanged()
-      )
-      .subscribe((text: string) => this.showSearchOption(text), error => console.warn('err: ' + error));
     this.subscriptions.add(this.billService.elementsView.subscribe(elements => (this.elementsView = elements)));
 
     this.subscriptions.add(
@@ -104,7 +84,6 @@ export class BillListComponent implements OnInit, OnDestroy {
     this.today = moment();
     this.todayPlusOneMonth = moment(this.today).add(1, 'months');
     this.todayPlusOneYear = moment(this.today).add(1, 'year');
-    this.cleanSelected();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -161,34 +140,7 @@ export class BillListComponent implements OnInit, OnDestroy {
     });
   }
 
-  showSearchOption(text: string): void {
-    if (text.length > 1) {
-      this.search = text;
-      this.billService.filterBill(this.search).subscribe(
-        res => {
-          this.searchOptions = res;
-          console.log(res);
-        },
-        error => console.warn('err: ' + error)
-      );
-    } else {
-      this.clearSearchInput();
-    }
-  }
-
-  cleanSelected(): void {
-    this.filter.selectedWarranty = null;
-    this.filter.selectedPriceFrom = null;
-    this.filter.selectedPriceTo = null;
-    this.filter.selectedCategory = [];
-    this.billService.filter.next(this.filter);
-  }
-
   getByFilter(): void {
-    this.searchIdList = [];
-    if (this.searchOptions) {
-      this.searchIdList = this.searchOptions.reduce((arr, option) => option.idList, []);
-    }
     this.getBillsByWarranty();
     const filterObject = {
       selectedCategory: this.filter.selectedCategory,
@@ -198,7 +150,7 @@ export class BillListComponent implements OnInit, OnDestroy {
       purchaseDateTo: this.filter.purchaseDateTo,
       warrantyDateFrom: this.filter.warrantyFrom,
       warrantyDateTo: this.filter.warrantyTo,
-      searchIdList: this.searchIdList
+      searchIdList: this.filter.searchIdList
     };
 
     this.billService.filterAll(filterObject).subscribe(res => {
@@ -250,16 +202,6 @@ export class BillListComponent implements OnInit, OnDestroy {
     this.getByFilter();
   }
 
-  clearSearchInput(): void {
-    this.searchOptions = [];
-    this.getByFilter();
-  }
-
-  refresh(): void {
-    this.cleanSelected();
-    this.getBills();
-  }
-
   expandPanel(bill: Bill): void {
     const index = this.bills.indexOf(bill);
     if (index >= 0) {
@@ -293,10 +235,5 @@ export class BillListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
-    this.authListenerSubs.unsubscribe();
-  }
-
-  onLogout() {
-    this.authService.logout();
   }
 }
