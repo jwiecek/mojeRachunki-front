@@ -30,4 +30,29 @@ mat-toolbar {
   .logo{
     cursor: pointer;
   }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .logo {
+      position: relative;
+      top: 10px;
+      margin-left: 20px;
+    }
+    button {
+      padding-left: 0;
+      position: relative;
+      bottom: 1px;
+      margin-right: -30px;
+      .mat-icon-back {
+        font-size: 40px;
+        position: relative;
+        top: 5px;
+        margin-left: 0;
+        margin-right: 35px;
+      }
+    }
+  }
 }

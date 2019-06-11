@@ -10,25 +10,25 @@
     </div>
   </div>
 
-  <div *ngIf="isMobile && headerName === 'Lista'" fxLayout="row" fxLayoutAlign="space-between center" fxFlex>
-     <div *ngIf="!searchIsClicked">
-        <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>Kontakt</button>
-          <button mat-menu-item (click)="onLogout()">Wyloguj</button>
-        </mat-menu>
-        <span routerLink="/" class="logo"><a><span>po</span>RACHUNKI</a></span>
-      <div (click)="searchIsClicked = true;"><mat-icon class="search" matSuffix>search</mat-icon></div>
+  <div *ngIf="isMobile && headerName === 'Lista'" fxFlex>
+    <div *ngIf="!searchIsClicked" fxLayout="row" fxFlex>
+      <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Kontakt</button>
+        <button mat-menu-item (click)="onLogout()">Wyloguj</button>
+      </mat-menu>
+      <a routerLink="/" class="logo"><span>po</span>RACHUNKI</a>
+      <div class="spacer"></div>
+      <button mat-button (click)="searchIsClicked = true;"><mat-icon class="search" matSuffix>search</mat-icon></button>
     </div>
-    <div *ngIf="searchIsClicked" fxLayout="row">
-      <button mat-button (click)="searchIsClicked = false;"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <div *ngIf="searchIsClicked" fxLayout="row" fxFlex>
+      <button mat-button (click)="searchIsClicked = false;"><mat-icon class="mat-icon-back">keyboard_arrow_left</mat-icon></button>
       <app-bill-search (filterBills)="getByFilter()"></app-bill-search>
     </div>
-
   </div>
 
   <div *ngIf="isMobile && headerName !== 'Lista'" fxLayout="row">
-    <span><a routerLink="/"><mat-icon>keyboard_arrow_left</mat-icon></a></span>
+    <span><a routerLink="/"><mat-icon class="mat-icon-back">keyboard_arrow_left</mat-icon></a></span>
     <h3>{{headerName}}</h3>
   </div>
 

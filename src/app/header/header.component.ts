@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.onResize();
-    this.route.params.subscribe(res => console.log(res));
+    this.route.params.subscribe();
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.subscriptions.add(
       this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
