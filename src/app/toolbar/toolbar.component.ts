@@ -15,7 +15,7 @@ import { FilterInterface } from '../_interfaces/filter.interface';
 export class ToolbarComponent {
   @Output() onViewByWarranty = new EventEmitter<void>();
   @Input() billsWarrantyInMonthLength: number;
-  filter: FilterInterface;
+  public filter: FilterInterface;
 
   constructor(private billService: BillService, private bottomSheet: MatBottomSheet) {}
 

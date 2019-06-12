@@ -1,12 +1,12 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { BillService } from '../bill.service';
 import { TagService } from '../../tag/tag.service';
-import { Bill } from '../bill.model';
+import { Bill } from '../../_interfaces/bill.interface';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
-import { Tag } from '../../tag/tag.model';
+import { Tag } from '../../_interfaces/tag.interface';
 import { BillPhotoDialogComponent } from '../dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
@@ -155,9 +155,8 @@ export class BillListComponent implements OnInit, OnDestroy {
     this.billService.filterAll(filterObject).subscribe(res => {
       this.bills = res;
       this.bills.sort((a, b) => +new Date(b.purchaseDate) - +new Date(a.purchaseDate));
+      this.billService.resultCount.next(this.bills.length);
     });
-    this.filter.resultCount = this.bills.length;
-    // this.billService.filter.next(this.filter);
   }
 
   getBillsByWarranty(): void {
@@ -183,6 +182,7 @@ export class BillListComponent implements OnInit, OnDestroy {
       const index = this.filter.selectedCategory.indexOf(tag);
       if (index >= 0) {
         this.filter.selectedCategory.splice(index, 1);
+        // console.log(this.filter.selectedCategory);
         this.billService.filter.next(this.filter);
       }
     }

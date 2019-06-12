@@ -1,7 +1,7 @@
 <div fxLayout="column">
   <div fxLayout="row" *ngIf="userIsAuthenticated" fxFlex>
     <div fxLayout="column" *ngIf="!isMobile" class="filter-left-container">
-      <app-filter-dialog></app-filter-dialog>
+      <app-filter-bill (onChangeCategory)="getByFilter()"></app-filter-bill>
       <app-change-view-dialog></app-change-view-dialog>
     </div>
     <div fxFlex class="main-view-container" fxLayout="column" fxLayoutAlign="space-between stretch">

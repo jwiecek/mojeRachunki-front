@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { BillService } from '../bill.service';
+import { BillService } from '../../bill/bill.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
@@ -51,7 +51,6 @@ export class BillSearchComponent implements OnInit, OnDestroy {
       this.billService.filterBill(this.search).subscribe(
         res => {
           this.searchOptions = res;
-          console.log(res);
         },
         error => console.warn('err: ' + error)
       );

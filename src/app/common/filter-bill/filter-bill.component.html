@@ -1,0 +1,87 @@
+<div class="mat-typography">
+  <h2>Filtrowanie: </h2>
+  <div [ngClass]="{'main-container-mobile': isMobile, 'main-container-desktop': !isMobile}">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>Kategoria</h3>
+        </mat-expansion-panel-header>
+        <div *ngFor="let category of categoryList" class="checkbox-list">
+          <mat-checkbox class="my-checkbox"
+                        (change)="setCategory()"
+                        [(ngModel)]="category.selected"
+                        color="primary">{{category.label}}
+          </mat-checkbox>
+          <mat-divider></mat-divider>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="!isMobile">
+        <mat-expansion-panel-header>
+          <h3>Cena</h3>
+        </mat-expansion-panel-header>
+        <div fxLayout="row" class="input-box">
+          <mat-form-field>
+            <input matInput placeholder="od" [(ngModel)]="filter.selectedPriceFrom" (ngModelChange)="setPrice()">
+            <span matSuffix>zł</span>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="do" [(ngModel)]="filter.selectedPriceTo" (ngModelChange)="setPrice()">
+            <span matSuffix>zł</span>
+          </mat-form-field>
+          <mat-divider></mat-divider>
+
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="!isMobile">
+        <mat-expansion-panel-header>
+          <h3>Data zakupu</h3>
+        </mat-expansion-panel-header>
+        <form [formGroup]="dateForm" fxLayout="row" class="input-box">
+          <mat-form-field>
+            <input matInput [matDatepicker]="pickerFrom" placeholder="od" formControlName="fromDate" (dateChange)="setRange('fromDate')">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #pickerFrom></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field >
+            <input matInput [matDatepicker]="pickerTo" placeholder="do" formControlName="toDate" (dateChange)="setRange('toDate')">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #pickerTo></mat-datepicker>
+          </mat-form-field>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="!isMobile">
+        <mat-expansion-panel-header>
+          <h3>Pozostało gwarancji</h3>
+        </mat-expansion-panel-header>
+        <div *ngFor="let option of warrantyOptions" class="checkbox-list" >
+          <mat-radio-group [(ngModel)]="filter.selectedWarranty">
+            <mat-radio-button [value]="option" (change)="setWarrantyOption(option)" color="primary">
+              {{option}}
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-divider></mat-divider>
+        </div>
+        <form [formGroup]="warrantyForm" [hidden]="filter.selectedWarranty !== 'zakres'">
+          <mat-form-field>
+            <input matInput (dateChange)="setRange('fromWarranty')" [matDatepicker]="pickerFromWarranty" placeholder="od" formControlName="fromWarranty">
+            <mat-datepicker-toggle matSuffix [for]="pickerFromWarranty"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #pickerFromWarranty></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field >
+            <input matInput (dateChange)="setRange('toWarranty')" [matDatepicker]="pickerToWarranty" placeholder="do" formControlName="toWarranty">
+            <mat-datepicker-toggle matSuffix [for]="pickerToWarranty"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #pickerToWarranty></mat-datepicker>
+          </mat-form-field>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </div>
+  <ng-content *ngIf="isMobile"></ng-content>
+</div>

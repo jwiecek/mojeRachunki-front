@@ -1,9 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Bill } from '../bill.model';
+import { Bill } from '../../_interfaces/bill.interface';
 import { BillService } from '../bill.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Tag } from '../../tag/tag.model';
+import { Tag } from '../../_interfaces/tag.interface';
 import { TagService } from '../../tag/tag.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent, MatSliderChange } from '@angular/material';

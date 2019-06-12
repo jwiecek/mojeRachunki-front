@@ -45,7 +45,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { AuthGuard } from './auth/auth.guard';
 import { HeaderComponent } from './header/header.component';
-import { BillSearchComponent } from './bill/bill-search/bill-search.component';
+import { BillSearchComponent } from './common/bill-search/bill-search.component';
+import { FilterBillComponent } from './common/filter-bill/filter-bill.component';
 registerLocaleData(pl);
 
 @NgModule({
@@ -61,7 +62,8 @@ registerLocaleData(pl);
     LoginComponent,
     RegisterComponent,
     HeaderComponent,
-    BillSearchComponent
+    BillSearchComponent,
+    FilterBillComponent
   ],
   imports: [
     BrowserModule,

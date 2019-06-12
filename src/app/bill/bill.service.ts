@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Bill } from './bill.model';
+import { Bill } from '../_interfaces/bill.interface';
 import { FilterInterface } from '../_interfaces/filter.interface';
 import { WarrantyOptionsEnum } from '../_enums/warranty-option.enum';
 
@@ -24,7 +24,6 @@ export class BillService {
     warrantyFrom: null,
     warrantyTo: null,
     selectedWarranty: WarrantyOptionsEnum.NONE,
-    resultCount: 0,
     selectedCategory: [],
     selectedPriceFrom: null,
     selectedPriceTo: null,
@@ -33,6 +32,9 @@ export class BillService {
     searchIdList: []
   });
   public currentFilter = this.filter.asObservable();
+
+  public resultCount = new BehaviorSubject<number>(0);
+  public currentResultCount = this.resultCount.asObservable();
 
   constructor(private http: HttpClient) {
     this.loggedUserId = BillService.getLoggedUserId();

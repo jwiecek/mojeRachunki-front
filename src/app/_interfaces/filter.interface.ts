@@ -5,7 +5,6 @@ export interface FilterInterface {
   selectedCategory: string[];
   selectedPriceFrom: number;
   selectedPriceTo: number;
-  resultCount: number;
   warrantyFrom: moment.Moment;
   warrantyTo: moment.Moment;
   purchaseDateFrom: moment.Moment;
