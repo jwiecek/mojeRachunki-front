@@ -1,8 +1,9 @@
 import * as moment from 'moment';
+import { Tag } from './tag.interface';
 
 export interface FilterInterface {
   selectedWarranty: string;
-  selectedCategory: string[];
+  categoryList: Tag[];
   selectedPriceFrom: number;
   selectedPriceTo: number;
   warrantyFrom: moment.Moment;

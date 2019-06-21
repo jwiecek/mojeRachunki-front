@@ -1,7 +1,7 @@
 <div fxLayout="column">
   <div fxLayout="row" *ngIf="userIsAuthenticated" fxFlex>
     <div fxLayout="column" *ngIf="!isMobile" class="filter-left-container">
-      <app-filter-bill (onChangeCategory)="getByFilter()"></app-filter-bill>
+      <app-filter-bill></app-filter-bill>
       <app-change-view-dialog></app-change-view-dialog>
     </div>
     <div fxFlex class="main-view-container" fxLayout="column" fxLayoutAlign="space-between stretch">
@@ -21,12 +21,12 @@
         <div class="main-list-block" [@listAnimation]="billsLength">
           <div #target></div>
           <div fxLayout="row" class="filter-list-block">
-            <mat-chip-list *ngIf="filter.selectedCategory.length" aria-label="category tags" class="my-chip-list">
+            <mat-chip-list *ngIf="selectedCategoryList.length" aria-label="category tags" class="my-chip-list">
               <div class="search-tags-box">
                 <span>Kategoria:</span>
-                <mat-chip *ngFor="let category of filter.selectedCategory"
+                <mat-chip *ngFor="let category of selectedCategoryList"
                           [removable]="removable" (removed)="removeFilter(category,'category')">
-                  {{category}}
+                  {{category.label}}
                   <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                 </mat-chip>
               </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Bill } from '../_interfaces/bill.interface';
 import { FilterInterface } from '../_interfaces/filter.interface';
 import { WarrantyOptionsEnum } from '../_enums/warranty-option.enum';
@@ -24,7 +24,7 @@ export class BillService {
     warrantyFrom: null,
     warrantyTo: null,
     selectedWarranty: WarrantyOptionsEnum.NONE,
-    selectedCategory: [],
+    categoryList: [],
     selectedPriceFrom: null,
     selectedPriceTo: null,
     purchaseDateFrom: null,
@@ -43,15 +43,15 @@ export class BillService {
   static getLoggedUserId(): number {
     return JSON.parse(localStorage.getItem('currentUser')).userId;
   }
+
   getBills(): Observable<Bill[]> {
     // return this.http.get(`${this.API_URL}/bills/all`).pipe(tap(bill => new Bill(bill)));
     return this.http.get<Bill[]>(`${this.API_URL}/bills/allUserBills`);
   }
 
   createBill(bill: Bill): Observable<Bill> {
-    const newBill = bill;
-    newBill.createdById = this.loggedUserId;
-    return this.http.post<Bill>(`${this.API_URL}/bills/create`, newBill);
+    bill.createdById = this.loggedUserId;
+    return this.http.post<Bill>(`${this.API_URL}/bills/create`, bill);
   }
 
   updateBill(bill: Bill, id: string): Observable<Bill> {

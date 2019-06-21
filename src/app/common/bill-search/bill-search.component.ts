@@ -40,7 +40,9 @@ export class BillSearchComponent implements OnInit, OnDestroy {
 
     this.subscriptions.add(
       this.billService.currentFilter.subscribe((filter: FilterInterface) => {
-        this.filter = filter;
+        setTimeout(() => {
+          this.filter = filter;
+        }, 1000);
       })
     );
   }

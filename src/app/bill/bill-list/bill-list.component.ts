@@ -43,16 +43,15 @@ export class BillListComponent implements OnInit, OnDestroy {
   public elementsView;
   public filter: FilterInterface;
   public billsWarrantyInMonth = 0;
-  public selectedCategory: Array<string> = [];
   private subscriptions: Subscription = new Subscription();
   public removable = true;
   private today;
   private todayPlusOneMonth;
   private todayPlusOneYear;
-  public value;
-  public innerWidth: any;
   public isMobile: boolean;
   public userIsAuthenticated = false;
+  public categoryList: Tag[];
+  public selectedCategoryList: Tag[];
 
   constructor(
     private billService: BillService,
@@ -88,8 +87,8 @@ export class BillListComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.innerWidth = window.innerWidth;
-    this.isMobile = this.innerWidth < 600;
+    const innerWidth = window.innerWidth;
+    this.isMobile = innerWidth < 600;
   }
 
   getBills(): void {
@@ -123,26 +122,32 @@ export class BillListComponent implements OnInit, OnDestroy {
       if (!userTags.length) {
         this.tagService.getBasicTags().subscribe((tags: Tag[]) => {
           this.tags = tags;
-          this.tags.forEach((t: Tag) => {
+          this.tags.forEach((tag: Tag) => {
             const newTag = {
-              label: t.label,
-              type: t.type,
-              belongToLabel: t.belongToLabel,
+              label: tag.label,
+              type: tag.type,
+              belongToLabel: tag.belongToLabel,
               createdById: this.authService.userId
             };
-            this.tagService.addTag(newTag).subscribe(e => console.log(e));
+            this.tagService.addTag(newTag).subscribe();
           });
         });
       } else {
         this.tags = userTags;
       }
+      this.categoryList = userTags.filter((tag: Tag) => tag.type === 'purchaseType');
+      this.filter.categoryList = this.categoryList.map(category => {
+        category.selected = false;
+        return category;
+      });
+      this.billService.filter.next(this.filter);
     });
   }
 
   getByFilter(): void {
     this.getBillsByWarranty();
     const filterObject = {
-      selectedCategory: this.filter.selectedCategory,
+      selectedCategory: this.filter.categoryList.filter(category => category.selected === true).map(c => c.label),
       selectedPriceFrom: this.filter.selectedPriceFrom,
       selectedPriceTo: this.filter.selectedPriceTo,
       purchaseDateFrom: this.filter.purchaseDateFrom,
@@ -151,6 +156,8 @@ export class BillListComponent implements OnInit, OnDestroy {
       warrantyDateTo: this.filter.warrantyTo,
       searchIdList: this.filter.searchIdList
     };
+
+    this.selectedCategoryList = this.filter.categoryList.filter(category => category.selected === true);
 
     this.billService.filterAll(filterObject).subscribe(res => {
       this.bills = res;
@@ -177,12 +184,12 @@ export class BillListComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeFilter(tag: string, type: string): void {
+  removeFilter(tag: Tag, type: string): void {
     if (type === 'category') {
-      const index = this.filter.selectedCategory.indexOf(tag);
+      const index = this.filter.categoryList.indexOf(tag);
       if (index >= 0) {
-        this.filter.selectedCategory.splice(index, 1);
-        // console.log(this.filter.selectedCategory);
+        // this.filter.categoryList.splice(index, 1);
+        this.filter.categoryList[index].selected = false;
         this.billService.filter.next(this.filter);
       }
     }

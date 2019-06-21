@@ -6,6 +6,7 @@ import { WarrantyOptionsEnum } from '../_enums/warranty-option.enum';
 import { BillService } from '../bill/bill.service';
 import { Output } from '@angular/core';
 import { FilterInterface } from '../_interfaces/filter.interface';
+import { BillListComponent } from '../bill/bill-list/bill-list.component';
 
 @Component({
   selector: 'app-toolbar',
@@ -29,13 +30,15 @@ export class ToolbarComponent {
     this.filter.selectedPriceTo = null;
     this.filter.purchaseDateFrom = null;
     this.filter.purchaseDateTo = null;
-    this.filter.selectedCategory = [];
+    this.filter.categoryList = [];
     this.billService.filter.next(this.filter);
     this.onViewByWarranty.emit();
   }
 
   showFilterOption(): void {
     const bottomSheet = this.bottomSheet.open(FilterDialogComponent);
-    bottomSheet.afterDismissed().subscribe();
+    bottomSheet.afterDismissed().subscribe(() => {
+      // this.billComponent.getByFilter();
+    });
   }
 }

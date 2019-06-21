@@ -6,7 +6,7 @@
         <mat-expansion-panel-header>
           <h3>Kategoria</h3>
         </mat-expansion-panel-header>
-        <div *ngFor="let category of categoryList" class="checkbox-list">
+        <div *ngFor="let category of filter.categoryList" class="checkbox-list">
           <mat-checkbox class="my-checkbox"
                         (change)="setCategory()"
                         [(ngModel)]="category.selected"
@@ -81,7 +81,6 @@
         </form>
       </mat-expansion-panel>
     </mat-accordion>
-
   </div>
   <ng-content *ngIf="isMobile"></ng-content>
 </div>

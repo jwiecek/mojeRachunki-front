@@ -1,10 +1,8 @@
-import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from '@angular/core';
-import { Tag } from '../../_interfaces/tag.interface';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { FilterInterface } from '../../_interfaces/filter.interface';
 import { BillService } from '../../bill/bill.service';
-import { TagService } from '../../tag/tag.service';
 import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
 
 @Component({
@@ -13,19 +11,18 @@ import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
   styleUrls: ['./filter-bill.component.scss']
 })
 export class FilterBillComponent implements OnInit, OnDestroy {
-  private categoryList: Tag[];
   private subscriptions: Subscription = new Subscription();
-  private dateForm: FormGroup;
-  private warrantyForm: FormGroup;
-  private warrantyOptions = [];
+  public dateForm: FormGroup;
+  public warrantyForm: FormGroup;
+  public warrantyOptions = [];
   public isMobile;
   public filter: FilterInterface;
-  @Output() onChangeCategory = new EventEmitter<void>();
 
-  constructor(private billService: BillService, private tagService: TagService) {}
+  constructor(private billService: BillService) {}
 
   ngOnInit() {
     this.onResize();
+
     this.dateForm = new FormGroup({
       fromDate: new FormControl(),
       toDate: new FormControl()
@@ -40,8 +37,7 @@ export class FilterBillComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.billService.currentFilter.subscribe((filter: FilterInterface) => {
         this.filter = filter;
-        this.getList();
-        if (filter.selectedWarranty === WarrantyOptionsEnum.NONE) {
+        if (this.filter.selectedWarranty === WarrantyOptionsEnum.NONE) {
           this.filter.warrantyFrom = this.warrantyForm.get('fromWarranty').value;
           this.filter.warrantyTo = this.warrantyForm.get('toWarranty').value;
         } else {
@@ -58,22 +54,8 @@ export class FilterBillComponent implements OnInit, OnDestroy {
     this.isMobile = innerWidth < 660;
   }
 
-  getList(): void {
-    this.tagService.getTags().subscribe((tags: Tag[]) => {
-      this.categoryList = tags.filter((tag: Tag) => tag.type === 'purchaseType');
-      this.categoryList.map(tag => {
-        this.filter.selectedCategory.some(label => label === tag.label)
-          ? (tag.selected = true)
-          : (tag.selected = false);
-      });
-    });
-  }
-
   setCategory(): void {
-    this.filter.selectedCategory = this.categoryList
-      .filter(label => label.selected === true)
-      .map(category => category.label);
-    this.onChangeCategory.emit();
+    this.billService.filter.next(this.filter);
   }
 
   setPrice(): void {
