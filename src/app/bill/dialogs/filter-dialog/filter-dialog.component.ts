@@ -1,4 +1,12 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  NgZone,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { BillService } from '../../bill.service';
 import { Subscription } from 'rxjs';
@@ -8,8 +16,7 @@ import { TagService } from '../../../tag/tag.service';
 @Component({
   selector: 'app-filter-dialog',
   templateUrl: './filter-dialog.component.html',
-  styleUrls: ['./filter-dialog.component.scss'],
-  providers: [BillListComponent]
+  styleUrls: ['./filter-dialog.component.scss']
 })
 export class FilterDialogComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
@@ -19,7 +26,8 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   constructor(
     private billService: BillService,
     private tagService: TagService,
-    private bottomSheetRef: MatBottomSheetRef<FilterDialogComponent>
+    private bottomSheetRef: MatBottomSheetRef<FilterDialogComponent>,
+    private ref: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -28,6 +36,7 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
       this.billService.currentResultCount.subscribe(
         (resultCount: number) => {
           this.resultCount = resultCount;
+          this.ref.detectChanges();
         },
         error => console.log('error', error)
       )

@@ -30,6 +30,8 @@ registerLocaleData(pl);
 @NgModule({
   declarations: [
     AppComponent,
+    TagComponent,
+
     BillCreateComponent,
     BillListComponent,
     ToolbarComponent,
@@ -38,8 +40,7 @@ registerLocaleData(pl);
     BillPhotoDialogComponent,
     HeaderComponent,
     BillSearchComponent,
-    FilterBillComponent,
-    TagComponent
+    FilterBillComponent
   ],
   imports: [
     BrowserModule,

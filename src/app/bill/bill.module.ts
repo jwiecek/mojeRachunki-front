@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { MaterialModule } from '../material/material.module';
 import { BillService } from './bill.service';
 import { BillListComponent } from './bill-list/bill-list.component';
@@ -9,11 +9,12 @@ import { FilterDialogComponent } from './dialogs/filter-dialog/filter-dialog.com
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { FilterBillComponent } from './filter-bill/filter-bill.component';
 import { BillSearchComponent } from './bill-search/bill-search.component';
-import { AuthRoutingModule } from '../auth/auth-routing.module';
 import { CommonModule } from '@angular/common';
+import { BillRoutingModule } from './bill-routing.module';
+import { SharedModule } from '../common/shared.module';
 
 @NgModule({
-  imports: [CommonModule, MaterialModule, AuthRoutingModule],
+  imports: [CommonModule, MaterialModule, BillRoutingModule, SharedModule],
   declarations: [
     BillListComponent,
     BillCreateComponent,
