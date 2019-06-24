@@ -25,10 +25,12 @@ export class FilterDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.onResize();
     this.subscriptions.add(
-      this.billService.currentResultCount.subscribe((resultCount: number) => {
-        this.resultCount = resultCount;
-        console.log(this.resultCount);
-      })
+      this.billService.currentResultCount.subscribe(
+        (resultCount: number) => {
+          this.resultCount = resultCount;
+        },
+        error => console.log('error', error)
+      )
     );
   }
 

@@ -188,7 +188,6 @@ export class BillListComponent implements OnInit, OnDestroy {
     if (type === 'category') {
       const index = this.filter.categoryList.indexOf(tag);
       if (index >= 0) {
-        // this.filter.categoryList.splice(index, 1);
         this.filter.categoryList[index].selected = false;
         this.billService.filter.next(this.filter);
       }
