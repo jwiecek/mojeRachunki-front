@@ -24,7 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public userIsAuthenticated = false;
   private subscriptions: Subscription = new Subscription();
   public searchIsClicked = false;
-  private filter: any;
+  private filter: FilterInterface;
 
   ngOnInit() {
     this.onResize();
@@ -55,10 +55,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   refresh(): void {
     const filter: FilterInterface = {
+      searchIdList: [],
       warrantyFrom: null,
       warrantyTo: null,
       selectedWarranty: WarrantyOptionsEnum.NONE,
-      categoryList: [],
+      categoryList: this.filter.categoryList.map(category => {
+        category.selected = false;
+        return category;
+      }),
       selectedPriceFrom: null,
       selectedPriceTo: null,
       purchaseDateFrom: null,

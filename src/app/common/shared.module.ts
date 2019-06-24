@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-  imports: [RouterModule],
-  exports: [],
+  imports: [FlexLayoutModule],
+  exports: [FlexLayoutModule],
   declarations: [],
   providers: []
 })

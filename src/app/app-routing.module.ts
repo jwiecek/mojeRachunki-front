@@ -3,9 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { BillCreateComponent } from './bill/bill-create/bill-create.component';
 import { BillListComponent } from './bill/bill-list/bill-list.component';
 import { TagComponent } from './tag/tag/tag.component';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
 import { AuthGuard } from './auth/auth.guard';
+import { AuthModule } from './auth/auth.module';
 
 const routes: Routes = [
   { path: '', component: BillListComponent, canActivate: [AuthGuard], data: { title: 'Lista' } },
@@ -16,13 +15,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { title: 'Edytuj rachunek' }
   },
-  { path: 'tags', component: TagComponent, canActivate: [AuthGuard], data: { title: 'Edycja tagów' } },
-  { path: 'login', component: LoginComponent, data: { title: 'Logowanie' } },
-  { path: 'register', component: RegisterComponent, data: { title: 'Rejestracja' } }
+  { path: 'tags', component: TagComponent, canActivate: [AuthGuard], data: { title: 'Edycja tagów' } }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [AuthModule, RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [AuthGuard]
 })

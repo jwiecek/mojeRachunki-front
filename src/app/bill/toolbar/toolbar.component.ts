@@ -30,7 +30,7 @@ export class ToolbarComponent {
     this.filter.selectedPriceTo = null;
     this.filter.purchaseDateFrom = null;
     this.filter.purchaseDateTo = null;
-    this.filter.categoryList = [];
+    this.filter.categoryList.forEach(category => (category.selected = false));
     this.billService.filter.next(this.filter);
     this.onViewByWarranty.emit();
   }

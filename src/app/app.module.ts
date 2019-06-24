@@ -9,7 +9,6 @@ import { BillListComponent } from './bill/bill-list/bill-list.component';
 import { MatBottomSheetRef } from '@angular/material';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TagComponent } from './tag/tag/tag.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { ToolbarComponent } from './bill/toolbar/toolbar.component';
 import { ChangeViewDialogComponent } from './bill/dialogs/change-view-dialog/change-view-dialog.component';
 import { FilterDialogComponent } from './bill/dialogs/filter-dialog/filter-dialog.component';
@@ -17,15 +16,14 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/m
 import { BillPhotoDialogComponent } from './bill/dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import pl from '@angular/common/locales/pl';
 import { registerLocaleData } from '@angular/common';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { AuthGuard } from './auth/auth.guard';
 import { HeaderComponent } from './common/header/header.component';
 import { BillSearchComponent } from './bill/bill-search/bill-search.component';
 import { FilterBillComponent } from './bill/filter-bill/filter-bill.component';
-import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './common/shared.module';
+import { AuthModule } from './auth/auth.module';
+import { BillModule } from './bill/bill.module';
 
 registerLocaleData(pl);
 
@@ -34,25 +32,25 @@ registerLocaleData(pl);
     AppComponent,
     BillCreateComponent,
     BillListComponent,
-    TagComponent,
     ToolbarComponent,
     ChangeViewDialogComponent,
     FilterDialogComponent,
     BillPhotoDialogComponent,
     HeaderComponent,
     BillSearchComponent,
-    FilterBillComponent
+    FilterBillComponent,
+    TagComponent
   ],
   imports: [
     BrowserModule,
+    SharedModule,
+    AuthModule,
+    // BillModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
-    FlexLayoutModule,
-    MatMomentDateModule,
-    AuthModule,
-    SharedModule
+    MatMomentDateModule
   ],
   providers: [
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
@@ -61,7 +59,7 @@ registerLocaleData(pl);
     AuthGuard,
     { provide: MatBottomSheetRef, useValue: {} }
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [ChangeViewDialogComponent, FilterDialogComponent, BillPhotoDialogComponent]
+  entryComponents: [ChangeViewDialogComponent, FilterDialogComponent, BillPhotoDialogComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

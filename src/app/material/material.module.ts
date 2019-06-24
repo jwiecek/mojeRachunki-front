@@ -76,6 +76,5 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule,
     MatIconModule
   ]
-  // providers: [{ provide: MatBottomSheetRef, useValue: {} }]
 })
 export class MaterialModule {}
