@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { BillService } from '../../bill/bill.service';
+import { BillService } from '../bill.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { FilterInterface } from '../../_interfaces/filter.interface';
+import { FilterInterface } from '../interfaces/filter.interface';
 
 @Component({
   selector: 'app-bill-search',

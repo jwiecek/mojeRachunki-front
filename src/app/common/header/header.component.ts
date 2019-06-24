@@ -1,10 +1,10 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FilterInterface } from '../_interfaces/filter.interface';
-import { BillService } from '../bill/bill.service';
-import { WarrantyOptionsEnum } from '../_enums/warranty-option.enum';
+import { FilterInterface } from '../../bill/interfaces/filter.interface';
+import { BillService } from '../../bill/bill.service';
+import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
 
 @Component({
   selector: 'app-header',

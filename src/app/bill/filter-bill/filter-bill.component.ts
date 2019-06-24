@@ -1,8 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
-import { FilterInterface } from '../../_interfaces/filter.interface';
-import { BillService } from '../../bill/bill.service';
+import { FilterInterface } from '../interfaces/filter.interface';
+import { BillService } from '../bill.service';
 import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
 
 @Component({

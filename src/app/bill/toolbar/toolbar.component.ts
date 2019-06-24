@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input } from '@angular/core';
-import { ChangeViewDialogComponent } from '../bill/dialogs/change-view-dialog/change-view-dialog.component';
+import { ChangeViewDialogComponent } from '../dialogs/change-view-dialog/change-view-dialog.component';
 import { MatBottomSheet } from '@angular/material';
-import { FilterDialogComponent } from '../bill/dialogs/filter-dialog/filter-dialog.component';
-import { WarrantyOptionsEnum } from '../_enums/warranty-option.enum';
-import { BillService } from '../bill/bill.service';
+import { FilterDialogComponent } from '../dialogs/filter-dialog/filter-dialog.component';
+import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
+import { BillService } from '../bill.service';
 import { Output } from '@angular/core';
-import { FilterInterface } from '../_interfaces/filter.interface';
-import { BillListComponent } from '../bill/bill-list/bill-list.component';
+import { FilterInterface } from '../interfaces/filter.interface';
+import { BillListComponent } from '../bill-list/bill-list.component';
 
 @Component({
   selector: 'app-toolbar',

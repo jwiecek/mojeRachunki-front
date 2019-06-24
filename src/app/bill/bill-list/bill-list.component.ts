@@ -1,17 +1,17 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { BillService } from '../bill.service';
 import { TagService } from '../../tag/tag.service';
-import { Bill } from '../../_interfaces/bill.interface';
+import { Bill } from '../interfaces/bill.interface';
 import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { WarrantyOptionsEnum } from '../../_enums/warranty-option.enum';
-import { Tag } from '../../_interfaces/tag.interface';
+import { Tag } from '../../tag/interfaces/tag.interface';
 import { BillPhotoDialogComponent } from '../dialogs/bill-photo-dialog/bill-photo-dialog.component';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
-import { FilterInterface } from '../../_interfaces/filter.interface';
+import { FilterInterface } from '../interfaces/filter.interface';
 
 @Component({
   selector: 'app-bill-list',

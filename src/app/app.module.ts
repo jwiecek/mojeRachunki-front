@@ -10,7 +10,7 @@ import { MatBottomSheetRef } from '@angular/material';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TagComponent } from './tag/tag/tag.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ToolbarComponent } from './bill/toolbar/toolbar.component';
 import { ChangeViewDialogComponent } from './bill/dialogs/change-view-dialog/change-view-dialog.component';
 import { FilterDialogComponent } from './bill/dialogs/filter-dialog/filter-dialog.component';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -21,9 +21,11 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { AuthGuard } from './auth/auth.guard';
-import { HeaderComponent } from './header/header.component';
-import { BillSearchComponent } from './common/bill-search/bill-search.component';
-import { FilterBillComponent } from './common/filter-bill/filter-bill.component';
+import { HeaderComponent } from './common/header/header.component';
+import { BillSearchComponent } from './bill/bill-search/bill-search.component';
+import { FilterBillComponent } from './bill/filter-bill/filter-bill.component';
+import { AuthModule } from './auth/auth.module';
+import { SharedModule } from './common/shared.module';
 
 registerLocaleData(pl);
 
@@ -37,8 +39,6 @@ registerLocaleData(pl);
     ChangeViewDialogComponent,
     FilterDialogComponent,
     BillPhotoDialogComponent,
-    LoginComponent,
-    RegisterComponent,
     HeaderComponent,
     BillSearchComponent,
     FilterBillComponent
@@ -50,7 +50,9 @@ registerLocaleData(pl);
     BrowserAnimationsModule,
     MaterialModule,
     FlexLayoutModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    AuthModule,
+    SharedModule
   ],
   providers: [
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },

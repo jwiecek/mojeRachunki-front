@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { TagService } from '../tag.service';
-import { Tag } from '../../_interfaces/tag.interface';
+import { Tag } from '../interfaces/tag.interface';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material';
 import { AuthService } from '../../auth/auth.service';

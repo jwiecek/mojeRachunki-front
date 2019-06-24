@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Bill } from '../_interfaces/bill.interface';
-import { FilterInterface } from '../_interfaces/filter.interface';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Bill } from './interfaces/bill.interface';
+import { FilterInterface } from './interfaces/filter.interface';
 import { WarrantyOptionsEnum } from '../_enums/warranty-option.enum';
 
 @Injectable({
@@ -41,7 +41,9 @@ export class BillService {
   }
 
   static getLoggedUserId(): number {
-    return JSON.parse(localStorage.getItem('currentUser')).userId;
+    if (localStorage.getItem('currentUser')) {
+      return JSON.parse(localStorage.getItem('currentUser')).userId;
+    }
   }
 
   getBills(): Observable<Bill[]> {
